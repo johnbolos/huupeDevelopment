@@ -915,11 +915,11 @@ function Footer({menu}: {menu?: EnhancedMenu}) {
       <section className={`beforeFooter relative text-center mb-[80px] ${currentURL.indexOf('/huupe-pro') >= 0 ? '' : 'lg:-mb-[80px]'} z-20 px-[25px] lg:px-0`}>
         <img
           src={currentURL.indexOf('/huupe-pro') >= 0 ? beforeFooter2 : beforeFooter}
-          className="relative z-2 inline-block"
+          className={`relative z-2 inline-block ${currentURL.indexOf('/huupe-pro') >= 0 ? 'h-[609px] lg:h-auto object-cover' : '' }`}
           alt="Huupe Overlay"
         />
         <div className={`p-6 pb-0 lg:pr-24 lg:pl-24 ${ currentURL.indexOf('/huupe-pro') >= 0 ? '-mt-[300px] lg:-mt-[400px]' : '-mt-[60px] lg:-mt-[120px]'}`}>
-          <h2 className="mb-12 text-[#000] text-[50px] lg:text-[151px] font-black leading-[60px] lg:leading-[151px]">{ currentURL.indexOf('/huupe-pro') >= 0 ? 'RESERVE NOW' : 'GET STARTED' }</h2>
+          <h2 className={`mb-12 text-[#000] text-[${ currentURL.indexOf('/huupe-pro') >= 0 ? '34px' : '50px' }] lg:text-[151px] font-black leading-[60px] lg:leading-[151px]`}>{ currentURL.indexOf('/huupe-pro') >= 0 ? 'RESERVE NOW' : 'GET STARTED' }</h2>
           { currentURL.indexOf('/huupe-pro') >= 0 ? 
           null
           :

@@ -71,6 +71,17 @@ import paramountIcon from '../images/paramount.webp';
 
 
 
+// Steps
+import step1 from '../images/huupeMini/step1.webp';
+import step2 from '../images/huupeMini/step2.webp';
+import step3 from '../images/huupeMini/step3.webp';
+import step4 from '../images/huupeMini/step4.webp';
+
+
+import someSVG from '../images/cSVG.svg';
+
+
+
 export const headers = routeHeaders;
 
 export async function loader({params, context}: LoaderArgs) {
@@ -337,6 +348,31 @@ export default function HuupeMini() {
     huluIcon,
     appletvIcon,
     paramountIcon
+  ];
+
+
+
+  const setUpDetails = [
+    {
+      title: 'Install Rim',
+      image: step1,
+      description: "You're already half-way there."
+    },
+    {
+      title: 'Install door hooks first then place over door',
+      image: step2,
+      description: "Any door or wall will work."
+    },
+    {
+      title: 'Setup Wi-Fi',
+      image: step3,
+      description: "Pair your bluetooth remote and connect to Wi-Fi."
+    },
+    {
+      title: 'Start huuping',
+      image: step4,
+      description: "Pick your game mode, stream shows, or just shoot some hoops."
+    },
   ]
 
   const [progressingSlide2, setProgressingSlide2] = useState( 100 / slideWithText.length );
@@ -370,7 +406,7 @@ export default function HuupeMini() {
   return (
     <>
 
-    <section className="homepage-banner homepage-huupemini-showcase px-0 lg:px-24 mb-12 lg:mb-24 lg:pt-[146px]">
+    <section className="homepage-banner homepage-huupemini-showcase px-0 lg:px-24 mb-12 lg:mb-24 pt-[100px] lg:pt-[146px]">
         <div className="relative">
           
           <LazyLoad>
@@ -395,7 +431,7 @@ export default function HuupeMini() {
         </div>
       </section>
 
-      <section className="homepage-logo-showcase px-6 lg:px-24 mb-12 lg:mb-0">
+      <section className="homepage-logo-showcase px-6 lg:px-24 mb-12">
         <h2 className="text-center center">Featured In</h2>
         <div className="logo-wrapper hidden xl:flex ">
           {thelogos.map((thelogo, index) => (
@@ -422,28 +458,68 @@ export default function HuupeMini() {
         </SlideCarousel>
       </section>
 
-      <section className="homepage-featured-products px-0 lg:px-12">
-        <div className="homepage-featured-products-wrapper">
-            
+      <section className="px-6 lg:px-24 mb-12 lg:mb-16">
+        <div className="">
+            <h2 className="text-[24px] text-[#000] font-bold font-[Montserrat]">Set up</h2>
+
+            {setUpDetails &&
+            <>
+            <div className="mt-[30px] -mx-[8px] hidden lg:flex">
+              {setUpDetails?.map((setup, index) => (
+                <div key={index} className="w-full lg:w-3/12 px-[8px]">
+                  <div className="bg-[#FBF9F8] rounded-[20px] py-[35px] px-[10px] text-center h-full">
+                    <p>Step {index + 1}</p>
+                    <h3 className="font-bold text-[24px] leading-[100%] mt-[10px] mb-[25px] lg:h-[48px]">{setup.title}</h3>
+                    <img src={setup.image} alt={setup.title} className="h-[235px] object-contain block object-center w-full"/>
+                    <p className="text-[24px] leading-[36px] mt-[50px]">{setup.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+              <div className="block lg:hidden mt-[30px]">
+                <CustomSlideshow className="has-slick-arrows" centerMode={false} autoPlay={false}>
+                  {setUpDetails?.map((setup, index) => (
+                    <div key={index} className="w-full lg:w-3/12 px-[8px]">
+                      <div className="bg-[#FBF9F8] rounded-[20px] py-[35px] px-[10px] text-center h-full">
+                        <p>Step {index + 1}</p>
+                        <h3 className="font-bold text-[24px] leading-[100%] mt-[10px] mb-[25px] lg:h-[48px]">{setup.title}</h3>
+                        <img src={setup.image} alt={setup.title} className="h-[235px] object-contain block object-center w-full"/>
+                        <p className="text-[16px] lg:text-[24px] leading-[24px] lg:leading-[36px] mt-[50px]">{setup.description}</p>
+                      </div>
+                    </div>
+                  ))}
+                </CustomSlideshow>
+              </div>
+            </>
+            }
         </div>
       </section>
 
 
-      <section className="homepage-banner homepage-huupemini-showcase px-0 lg:px-24 mb-12 lg:mb-24">
-        <h2 className="text-center text-[#000] text-[120px] leading-[120px] mb-[20px] font-black">FULL SCREEN PROTECTION</h2>
-        <p className="text-center text-[#0071E3] text-[24px] leading-[22px] !mb-[25px] lg:!mb-[40px]">User-Tested     FCC Certified     Warranty Guaranteed     User-Tested     FCC Certified     Warranty Guaranteed     User-Tested     FCC Certified</p>
-        <div className="relative rounded-[20px] overflow-hidden">
+      <section className="homepage-banner homepage-huupemini-showcase px-0 lg:px-24 mb-12">
+        <h2 className="text-center text-[#000] text-[50px] lg:text-[120px] leading-[100%] mb-[20px] font-black">FULL SCREEN PROTECTION</h2>
+        <p className="text-center text-[#0071E3] text-[24px] leading-[22px] !mb-[25px] lg:!mb-[40px] hidden lg:block">User-Tested <img src={someSVG} className="inline lg:-mt-[2px]" /> FCC Certified <img src={someSVG} className="inline lg:-mt-[2px]" /> Warranty Guaranteed <img src={someSVG} className="inline lg:-mt-[2px]" /> User-Tested <img src={someSVG} className="inline lg:-mt-[2px]" /> FCC Certified <img src={someSVG} className="inline lg:-mt-[2px]" /> Warranty Guaranteed <img src={someSVG} className="inline lg:-mt-[2px]" /> User-Tested <img src={someSVG} className="inline lg:-mt-[2px]" /> FCC Certified</p>
+
+        <SlideCarousel
+          containerStyles={'lg:hidden mb-[40px]'}
+          trackStyles={'flex gap-[15px]'}
+        >
+          <span className="whitespace-nowrap text-[24px] text-[#0071E3] leading-[24px] px-[10px]">User-Tested <img src={someSVG} className="inline lg:-mt-[2px]" /></span>
+          <span className="whitespace-nowrap text-[24px] text-[#0071E3] leading-[24px] px-[10px]">FCC Certified <img src={someSVG} className="inline lg:-mt-[2px]" /></span>
+          <span className="whitespace-nowrap text-[24px] text-[#0071E3] leading-[24px] px-[10px]">Warranty Guaranteed <img src={someSVG} className="inline lg:-mt-[2px]" /></span>
+        </SlideCarousel>
+        <div className="relative rounded-none rounded-[20px] overflow-hidden">
           
           <LazyLoad>
-            <img src={easyIntallation} alt="Easy Installation" className="hidden lg:block lg:rounded-[20px] w-full object-cover object-center max-h-[831px] min-h-[753px]"/>
+            <img src={easyIntallation} alt="Easy Installation" className="hidden lg:block rounded-none  lg:rounded-[20px] w-full object-cover object-center max-h-[831px] min-h-[753px]"/>
           </LazyLoad>
           <LazyLoad>
-            <img src={easyIntallationMobile} alt="Easy Installation Mobile" className="block lg:hidden lg:rounded-[20px] w-full object-cover object-center"/>
+            <img src={easyIntallationMobile} alt="Easy Installation Mobile" className="block lg:hidden rounded-none lg:rounded-[20px] w-full object-cover object-center"/>
           </LazyLoad>
           <div className="absolute top-0 left-0 w-full h-full z-10 bg-[#000] opacity-30"></div>
           <div className="absolute top-0 left-0 w-full h-full flex flex-col text-center items-center justify-center md:px-8 z-20">
-            <h2 className="mb-[10px] text-[120px] leading-[120px] text-[#fff] font-black">EASY INSTALLATION</h2>
-            <p className="text-[#fff] lg:text-[44px] lg:leading-[44px]">Over the door or wall mount</p>
+            <h2 className="mb-[10px] text-[50px] lg:text-[120px] leading-[50px] lg:leading-[120px] text-[#fff] font-black">EASY INSTALLATION</h2>
+            <p className="text-[#fff] text-[26px] lg:text-[44px] leading-[39px] lg:leading-[44px]">Over the door or wall mount</p>
           </div>
         </div>
         <div className="mt-[20px] lg:mt-[50px] text-center flex items-center justify-center flex-col lg:gap-[20px] max-w-[1110px] mx-[auto]">
@@ -537,7 +613,7 @@ export default function HuupeMini() {
       </section>
 
       <section className="home-progressing-slide mb-12 bg-gradient-to-b from-[#f6f6f6] to-[#eaeaea]">
-        <div className="p-0 pt-[15px] lg:pt-0 lg:p-24 flex">
+        <div className="p-0 pt-[15px] lg:pt-24 lg:p-24 flex">
             <div className="block">
               <div className="flex flex-col lg:flex-row homepage-text-image-slider-item">
                 <div className="w-full lg:w-6/12 p-6 lg:p-0 lg:pr-4">

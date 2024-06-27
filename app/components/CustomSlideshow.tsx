@@ -40,6 +40,20 @@ function CustomSlideshow({
     autoplaySpeed: isAutoPlay ? 5000 : 0,
     adaptiveHeight: !centerMode,
     infinite: true,
+    responsive: [
+      {
+        breakpoint: 9999,
+        settings: {
+          slidesToShow: numberSlides,
+        }
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 1,
+        }
+      }
+    ]
   };
 
   return (
