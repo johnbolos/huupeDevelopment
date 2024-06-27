@@ -1,0 +1,193 @@
+@font-face {
+  font-family: 'IBMPlexSerif';
+  font-display: swap;
+  font-weight: 400;
+  src: url('./fonts/IBMPlexSerif-Text.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'IBMPlexSerif';
+  font-display: swap;
+  font-weight: 400;
+  font-style: italic;
+  src: url('./fonts/IBMPlexSerif-TextItalic.woff2') format('woff2');
+}
+
+
+
+
+/* Radikal */
+@font-face {
+  font-family: 'Radikal';
+  font-display: swap;
+  font-weight: 100;
+  font-style: normal;
+  src: url('./fonts/Radikal-Font/ultraThin.otf') format('opentype');
+}
+@font-face {
+  font-family: 'Radikal';
+  font-display: swap;
+  font-weight: 100;
+  font-style: italic;
+  src: url('./fonts/Radikal-Font/ultraThinItalic.otf') format('opentype');
+}
+@font-face {
+  font-family: 'Radikal';
+  font-display: swap;
+  font-weight: 200;
+  font-style: normal;
+  src: url('./fonts/Radikal-Font/thin.otf') format('opentype');
+}
+@font-face {
+  font-family: 'Radikal';
+  font-display: swap;
+  font-weight: 200;
+  font-style: italic;
+  src: url('./fonts/Radikal-Font/thinItalic.otf') format('opentype');
+}
+@font-face {
+  font-family: 'Radikal';
+  font-display: swap;
+  font-weight: 300;
+  font-style: normal;
+  src: url('./fonts/Radikal-Font/light.otf') format('opentype');
+}
+@font-face {
+  font-family: 'Radikal';
+  font-display: swap;
+  font-weight: 300;
+  font-style: italic;
+  src: url('./fonts/Radikal-Font/lightItalic.otf') format('opentype');
+}
+@font-face {
+  font-family: 'Radikal';
+  font-display: swap;
+  font-weight: 400;
+  font-style: normal;
+  src: url('./fonts/Radikal-Font/normal.otf') format('opentype');
+}
+@font-face {
+  font-family: 'Radikal';
+  font-display: swap;
+  font-weight: 400;
+  font-style: italic;
+  src: url('./fonts/Radikal-Font/italic.otf') format('opentype');
+}
+@font-face {
+  font-family: 'Radikal';
+  font-display: swap;
+  font-weight: 500;
+  font-style: normal;
+  src: url('./fonts/Radikal-Font/medium.otf') format('opentype');
+}
+@font-face {
+  font-family: 'Radikal';
+  font-display: swap;
+  font-weight: 500;
+  font-style: italic;
+  src: url('./fonts/Radikal-Font/mediumItalic.otf') format('opentype');
+}
+@font-face {
+  font-family: 'Radikal';
+  font-display: swap;
+  font-weight: 700;
+  font-style: normal;
+  src: url('./fonts/Radikal-Font/bold.otf') format('opentype');
+}
+@font-face {
+  font-family: 'Radikal';
+  font-display: swap;
+  font-weight: 700;
+  font-style: italic;
+  src: url('./fonts/Radikal-Font/boldItalic.otf') format('opentype');
+}
+@font-face {
+  font-family: 'Radikal';
+  font-display: swap;
+  font-weight: 900;
+  font-style: normal;
+  src: url('./fonts/Radikal-Font/black.otf') format('opentype');
+}
+@font-face {
+  font-family: 'Radikal';
+  font-display: swap;
+  font-weight: 900;
+  font-style: italic;
+  src: url('./fonts/Radikal-Font/blackItalic.otf') format('opentype');
+}
+
+
+
+
+
+
+/* General Sans */
+@font-face {
+  font-family: 'General Sans';
+  font-display: swap;
+  font-weight: 200;
+  font-style: normal;
+  src: url('./fonts/GeneralSans_Complete/thin.otf') format('opentype');
+}
+@font-face {
+  font-family: 'General Sans';
+  font-display: swap;
+  font-weight: 200;
+  font-style: italic;
+  src: url('./fonts/GeneralSans_Complete/thinItalic.otf') format('opentype');
+}
+@font-face {
+  font-family: 'General Sans';
+  font-display: swap;
+  font-weight: 300;
+  font-style: normal;
+  src: url('./fonts/GeneralSans_Complete/light.otf') format('opentype');
+}
+@font-face {
+  font-family: 'General Sans';
+  font-display: swap;
+  font-weight: 300;
+  font-style: italic;
+  src: url('./fonts/GeneralSans_Complete/lightItalic.otf') format('opentype');
+}
+@font-face {
+  font-family: 'General Sans';
+  font-display: swap;
+  font-weight: 400;
+  font-style: normal;
+  src: url('./fonts/GeneralSans_Complete/normal.otf') format('opentype');
+}
+@font-face {
+  font-family: 'General Sans';
+  font-display: swap;
+  font-weight: 400;
+  font-style: italic;
+  src: url('./fonts/GeneralSans_Complete/italic.otf') format('opentype');
+}
+@font-face {
+  font-family: 'General Sans';
+  font-display: swap;
+  font-weight: 500;
+  font-style: normal;
+  src: url('./fonts/GeneralSans_Complete/medium.otf') format('opentype');
+}
+@font-face {
+  font-family: 'General Sans';
+  font-display: swap;
+  font-weight: 500;
+  font-style: italic;
+  src: url('./fonts/GeneralSans_Complete/mediumItalic.otf') format('opentype');
+}
+@font-face {
+  font-family: 'General Sans';
+  font-display: swap;
+  font-weight: 700;
+  font-style: normal;
+  src: url('./fonts/GeneralSans_Complete/bold.otf') format('opentype');
+}
+@font-face {
+  font-family: 'General Sans';
+  font-display: swap;
+  font-weight: 700;
+  font-style: italic;
+  src: url('./fonts/GeneralSans_Complete/boldItalic.otf') format('opentype');
+}
