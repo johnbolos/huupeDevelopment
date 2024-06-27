@@ -499,7 +499,7 @@ export default function HuupeMini() {
       <section className="homepage-banner homepage-huupemini-showcase px-0 lg:px-24 mb-12">
         <h2 className="text-center text-[#000] text-[50px] lg:text-[120px] leading-[100%] mb-[20px] font-black">FULL SCREEN PROTECTION</h2>
         <p className="text-center text-[#0071E3] text-[24px] leading-[22px] !mb-[25px] lg:!mb-[40px] hidden lg:block">User-Tested <img src={someSVG} className="inline lg:-mt-[2px]" /> FCC Certified <img src={someSVG} className="inline lg:-mt-[2px]" /> Warranty Guaranteed <img src={someSVG} className="inline lg:-mt-[2px]" /> User-Tested <img src={someSVG} className="inline lg:-mt-[2px]" /> FCC Certified <img src={someSVG} className="inline lg:-mt-[2px]" /> Warranty Guaranteed <img src={someSVG} className="inline lg:-mt-[2px]" /> User-Tested <img src={someSVG} className="inline lg:-mt-[2px]" /> FCC Certified</p>
-
+ 
         <SlideCarousel
           containerStyles={'lg:hidden mb-[40px]'}
           trackStyles={'flex gap-[15px]'}
