@@ -54,10 +54,10 @@ export function Drawer({
       title: 'huupe PRO',
     },
     {
-      name: 'Buy',
+      name: 'Shop Now',
       url: '/pages/buy',
       target: '_self',
-      title: 'Buy',
+      title: 'Shop Now',
     },
   ];
 
@@ -134,6 +134,7 @@ export function Drawer({
                           target={item.target}
                           prefetch="intent"
                           className={`pb-1 ${currentURL.indexOf('/products/') >= 0 ? 'hidden' : ''}`}
+                          onClick={() => onClose()}
                         >
                           {index == 0 || index == 1 ? <img className="h-[26px] inline-block" src={huupeNewLogo} /> : null}
                           {index == 1 ? <span className="font-bold font-[League Spartan]">{item.name}</span> : item.name}

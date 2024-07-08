@@ -265,6 +265,7 @@ function MenuMobileNav({menu, onClose}: {menu: []; onClose: () => void}) {
                               target={item.target}
                               prefetch="intent"
                               className={`pb-1 ${currentURL.indexOf('/products/') >= 0 ? 'hidden' : ''}`}
+                              onClick={() => onClose()}
                             >
                               {index == 0 || index == 1 ? 'huupe ' : null}
                               {index == 0 || index == 1 ? <span className="font-bold font-[League Spartan]">{item.name}</span> : item.name}
