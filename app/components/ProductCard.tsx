@@ -7,6 +7,8 @@ import type {ProductCardFragment} from 'storefrontapi.generated';
 import {Text, Link, AddToCartButton, Button} from '~/components';
 import {isDiscounted, isNewArrival} from '~/lib/utils';
 import {getProductPlaceholder} from '~/lib/placeholders';
+import huupeNewLogo from '../images/huupeLogoSVG.svg';
+
 
 export function ProductCard({
   product,
@@ -92,7 +94,10 @@ export function ProductCard({
               className="w-full overflow-hidden whitespace-nowrap text-ellipsis "
               as="h3"
             >
-              {product.title}
+              {product.handle == 'huupe-pro' && <><img className="h-[20px] inline-block mb-[4px]" src={huupeNewLogo} /> PRO</>}
+              {product.handle == 'huupe-classic' && <><img className="h-[20px] inline-block mb-[4px]" src={huupeNewLogo} /> Classic</>}
+              {product.handle != 'huupe-pro' && product.handle != 'huupe-classic' && <>{product.title}</>}
+              
               {firstVariant.quantityAvailable && firstVariant.quantityAvailable > 0 ?  <>
                 &nbsp;- <span className="available">Now available</span>
               </> 
