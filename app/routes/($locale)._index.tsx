@@ -50,6 +50,7 @@ import whatsinthebox4 from '../images/whatsinthebox4.png';
 import whatsinthebox5 from '../images/whatsinthebox5.png';
 import whatsinthebox6 from '../images/whatsinthebox6.png';
 import whatsinthebox7 from '../images/whatsinthebox7.png';
+// import whatsinthebox7 from '../images/huupeMini/step4.webp';
 import whatsinthebox8 from '../images/whatsinthebox8.png';
 
 
@@ -98,36 +99,11 @@ export async function loader({params, context}: LoaderArgs) {
       HOMEPAGE_FEATURED_PRODUCTS_QUERY,
       {
         variables: {
-          /**
-           * Country and language properties are automatically injected
-           * into all queries. Passing them is unnecessary unless you
-           * want to override them from the following default:
-           */
           country,
           language,
         },
       },
     ),
-    secondaryHero: context.storefront.query(COLLECTION_HERO_QUERY, {
-      variables: {
-        handle: 'backcountry',
-        country,
-        language,
-      },
-    }),
-    featuredCollections: context.storefront.query(FEATURED_COLLECTIONS_QUERY, {
-      variables: {
-        country,
-        language,
-      },
-    }),
-    tertiaryHero: context.storefront.query(COLLECTION_HERO_QUERY, {
-      variables: {
-        handle: 'winter-2022',
-        country,
-        language,
-      },
-    }),
     analytics: {
       pageType: AnalyticsPageType.home,
     },
@@ -376,30 +352,6 @@ export default function Homepage() {
 
   const [progressingSlide2, setProgressingSlide2] = useState( 100 / slideWithText.length );
   const [progressingSlide, setProgressingSlide] = useState( progressingSlide2 - 3 );
-
-  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
-  // may be new state to handle mobile image selection
-  const [selectedImageId, setSelectedId] = useState<number>(0);
-  const runTimer = useCallback(() => {
-    timer.current = setTimeout(() => {
-      if (selectedImageId === whatsInTheBox.length - 1) {
-        setSelectedId(0);
-      } else {
-        setSelectedId((prev) => prev + 1);
-      }
-    }, 7000);
-  }, [whatsInTheBox.length, selectedImageId]);
-
-  const setIndex = (index: number) => {
-    clearTimeout(timer.current);
-    setSelectedId(index);
-    runTimer();
-  };
-
-  useEffect(() => {
-    runTimer();
-    return () => clearTimeout(timer.current);
-  }, [runTimer]);
   
 
   return (
@@ -407,7 +359,6 @@ export default function Homepage() {
       <section className="homepage-banner px-0 lg:px-0 mb-12 lg:mb-12">
         <div className="relative">
           
-          <LazyLoad>
             <img src={homepagebanner} />
             {/* <video
               key={homeBannerVideo}
@@ -422,12 +373,11 @@ export default function Homepage() {
               <source src={homeBannerVideo} type="video/webm" />
               Your browser does not support the video tag.
             </video> */}
-          </LazyLoad>
           <div className="absolute top-0 left-0 w-full h-full flex flex-col text-center items-center justify-end pb-20 pt-20 md:px-8 lg:pt-0">
-            <h1 className="mb-6 lg:mb-12">The same fun smart huupe...but mini</h1>
+            <h1 className="mb-6 lg:mb-12 lg:!text-[50px] 2xl:!text-[68px]">The same fun smart huupe...but mini</h1>
             <Link
-              key="/products/the-huupe"
-              to="/products/the-huupe"
+              key="/products/huupe-classic"
+              to={`/products/huupe-classic`}
               target="_self"
               prefetch="intent"
               className="main-button normal-case"
@@ -439,7 +389,7 @@ export default function Homepage() {
         </div>
       </section>
 
-      <section className="homepage-logo-showcase px-6 lg:px-24 mb-12 lg:mb-0">
+      <section className="homepage-logo-showcase px-6 lg:px-12 2xl:px-24 mb-12">
         <h2 className="text-center center">Featured In</h2>
         <div className="logo-wrapper hidden xl:flex ">
           {thelogos.map((thelogo, index) => (
@@ -471,11 +421,11 @@ export default function Homepage() {
             {featuredProducts && (
                 <Suspense>
                 <Await resolve={featuredProducts}>
-                    {({products}) => {
-                    if (!products?.nodes) return <></>;
+                    {({featuredProducts}) => {
+                    if (!featuredProducts?.nodes) return <></>;
                     return (
                         <ProductSwimlane
-                        products={products}
+                        products={featuredProducts}
                         title="Featured Products"
                         count={3}
                         />
@@ -488,50 +438,50 @@ export default function Homepage() {
       </section>
 
 
-      <section className="homepage-banner homepage-huupemini-showcase px-0 lg:px-24 mb-12 lg:mb-24">
+      <section className="homepage-banner homepage-huupemini-showcase px-0 lg:px-12 2xl:px-24 mb-12 lg:mb-16">
         <div className="relative">
           
           <LazyLoad>
-            <img src={huupeMini} alt="Huupe Mini" className="hidden lg:block lg:rounded-[20px] w-full object-cover object-center max-h-[891px] min-h-[753px]"/>
+            <img src={huupeMini} alt="Huupe Mini" className="hidden lg:block lg:rounded-[20px] w-full object-cover object-center h-full max-h-[700px] 2xl:max-h-[891px] lg:min-h-[600px] 2xl:min-h-[753px]"/>
           </LazyLoad>
           <LazyLoad>
             <img src={huupeMiniMobile} alt="Huupe Mini Mobile" className="block lg:hidden lg:rounded-[20px] w-full object-cover object-center"/>
           </LazyLoad>
           <div className="absolute top-0 left-0 w-full h-full flex flex-col text-center items-center justify-end pb-20 pt-20 md:px-8 lg:pt-0">
-            <h2 className="mb-6 lg:mb-24 text-[55px] leading-[55px]"><img className="h-[44px] inline-block" src={huupeNewLogo} alt="Huupe Logo"/> <b className="font-black">mini</b><br/><span className="text-[34px] lg:text-[55px] leading-[34px] lg:leading-[55px]">is now available for purchase.</span></h2>
+            <h2 className="mb-6 lg:mb-24 !text-[34px] lg:!text-[40px] 2xl:!text-[55px] leading-[100%]"><img className="h-[34px] lg:h-[38px] 2xl:h-[44px] inline-block" src={huupeNewLogo} alt="Huupe Logo"/> <b className="font-black !text-[34px] lg:!text-[40px] 2xl:!text-[55px]">mini</b><br/><span className="text-[34px] lg:text-[40px] 2xl:text-[55px] leading-[100%]">is now available for purchase.</span></h2>
             <Link
-              key="/products/the-huupe"
-              to="/products/the-huupe"
+              key="/products/huupe-classic"
+              to={`/products/huupe-classic`}
               target="_self"
               prefetch="intent"
               className="main-button normal-case"
             >
               Buy now
             </Link>
-            <span className="mt-6 text-[#000000] text-[16px]">now available <del>$699</del> <b className="font-bold">$599</b></span>
+            <span className="mt-4 2xl:mt-6 text-[#000000] text-[16px]">now available <del>$699</del> <b className="font-bold">$599</b></span>
           </div>
         </div>
         <div className="mt-[20px] lg:mt-[50px] text-center flex items-center justify-center flex-col lg:gap-[20px] max-w-[1110px] mx-[auto]">
-          <h2 className="mb-4 lg:mb-0 text-[#000] text-[50px] leading-[50px] lg:text-[55px] lg:leading-[55px] font-black normal-case lg:uppercase">
+          <h2 className="mb-4 lg:mb-0 text-[#000] text-[50px] 2xl:text-[55px] leading-[100%] font-black normal-case lg:uppercase">
             Your games. <br className="block lg:hidden" />Your shows. <br className="block lg:hidden" />Your music. <br className="block lg:hidden" />All in the backboard.
           </h2>
           <p className="px-4 lg:px-0 max-w-[765px] mx-[auto] text-[#000] text-[20px] lg:text-[24px] leading-[30px] lg:leading-[24px]">The next generation of mini hoops are coming to you this year. Limited availability</p>
           <Link
-              key="/products/the-huupe"
-              to="/products/the-huupe"
+              key="/products/huupe-classic"
+              to={`/products/huupe-classic`}
               target="_self"
               prefetch="intent"
               className="main-button normal-case"
             >
               Buy now
             </Link>
-            <span className="block text-[#000000] mt-4 lg:mt-0">now available <del>$699</del> <b className="font-bold">$599</b></span>
+            <span className="block text-[#000000] text-[16px] 2xl:text-[24px] mt-4 lg:mt-0">now available <del>$699</del> <b className="font-bold">$599</b></span>
         </div>
       </section>
 
-      <section className="homepage-whatsinthebox px-0 lg:px-24 mb-12">
+      <section className="homepage-whatsinthebox px-0 lg:px-12 2xl:px-24 mb-12">
         <div className="whatsinthebox-text px-6 lg:px-0 max-w-[633px]">
-          <h2 className="text-[#000] text-[24px] lg:text-[48px] leading-[24px] lg:leading-[48px] font-bold mb-4">What's In The Box?</h2>
+          <h2 className="text-[#000] text-[24px] lg:text-[34px] 2xl:text-[48px] leading-[100%] font-bold mb-4">What's In The Box?</h2>
           <p className="text-[16px] text-[#000]">Everything you need to get your game on. Just find the nearest door, or mount it to your wall like you would a TV, hang up huupe mini, and start huuping.</p>
         </div>
 
@@ -552,14 +502,11 @@ export default function Homepage() {
               : null
           ))}
         </div>
-        <CustomSlideshow className={'lg:hidden'} newState={selectedImageId} centerMode={false} autoPlay={false}>
+        <CustomSlideshow newState={1} numberSlides={1} className={'lg:hidden'} centerMode={false} autoPlay={false}>
           {whatsInTheBox.map((item, index) => (
             <div
               key={index}
               className="p-0 pt-[30px] whatsinthebox-gallery-item w-full"
-              onClick={() => {
-                setIndex(index);
-              }}
             >
               <img
                 draggable={false}
@@ -574,49 +521,57 @@ export default function Homepage() {
       </section>
 
 
-      <section className="homepage-shottracking px-0 lg:px-24 mb-12 lg:mb-24">
+      <section className="homepage-shottracking px-0 lg:px-12 2xl:px-24 mb-12 lg:mb-24">
           <div className="relative">
             <LazyLoad>
-              <img src={shottracking} alt="Shot Tracking + Distance" className="min-h-[300px] object-cover lg:rounded-[20px]"/>
+              <img src={shottracking} alt="Shot Tracking + Distance" className="min-h-[300px] object-cover max-h-[891px] lg:rounded-[20px]"/>
             </LazyLoad>
             <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center text-center bg-[#00000033] rounded-[20px]">
-              <h2 className="text-[#fff] text-[50px] lg:text-[120px] font-black leading-[50px] lg:leading-[120px]">SHOP TRACKING + DISTANCE</h2>
-              <p className="w-full lg:text-[34px] text-[#fff] lg:leading-[22px] hidden lg:flex justify-between px-[30px]"><span>Shot Tracking</span><span>Distance Tracking</span><span>All Sensors</span><span>No Camera</span><span>1pt 2pt 3pt</span><span>Daily Challenges</span></p>
+              <h2 className="text-[#fff] text-[50px] lg:text-[80px] 2xl:text-[120px] font-black leading-[100%]">SHOP TRACKING + DISTANCE</h2>
+              {/* <p className="w-full lg:text-[24px] 2xl:text-[34px] text-[#fff] lg:leading-[22px] hidden lg:flex justify-between px-[30px]"><span>Shot Tracking</span><span>Distance Tracking</span><span>All Sensors</span><span>No Camera</span><span>1pt 2pt 3pt</span><span>Daily Challenges</span></p> */}
 
               <SlideCarousel
-                containerStyles={'mt-[25px] lg:hidden'}
+                containerStyles={'mt-[25px]'}
                 trackStyles={'flex gap-[15px]'}
               >
-                <span className="whitespace-nowrap text-[16px] text-[#fff] leading-[24px] px-[10px]">Shot Tracking</span>
-                <span className="whitespace-nowrap text-[16px] text-[#fff] leading-[24px] px-[10px]">Distance Tracking</span>
-                <span className="whitespace-nowrap text-[16px] text-[#fff] leading-[24px] px-[10px]">All Sensors</span>
-                <span className="whitespace-nowrap text-[16px] text-[#fff] leading-[24px] px-[10px]">No Camera</span>
-                <span className="whitespace-nowrap text-[16px] text-[#fff] leading-[24px] px-[10px]">1pt 2pt 3pt</span>
-                <span className="whitespace-nowrap text-[16px] text-[#fff] leading-[24px] px-[10px]">Daily Challenges</span>
+                <span className="whitespace-nowrap text-[16px] lg:text-[24px] 2xl:text-[34px] text-[#fff] leading-[24px] lg:leading-[22px] px-[10px]">Shot Tracking</span>
+                <span className="whitespace-nowrap text-[16px] lg:text-[24px] 2xl:text-[34px]  text-[#fff] leading-[24px] lg:leading-[22px] px-[10px]">Distance Tracking</span>
+                <span className="whitespace-nowrap text-[16px] lg:text-[24px] 2xl:text-[34px]  text-[#fff] leading-[24px] lg:leading-[22px] px-[10px]">All Sensors</span>
+                <span className="whitespace-nowrap text-[16px] lg:text-[24px] 2xl:text-[34px]  text-[#fff] leading-[24px] lg:leading-[22px] px-[10px]">No Camera</span>
+                <span className="whitespace-nowrap text-[16px] lg:text-[24px] 2xl:text-[34px]  text-[#fff] leading-[24px] lg:leading-[22px] px-[10px]">1pt 2pt 3pt</span>
+                <span className="whitespace-nowrap text-[16px] lg:text-[24px] 2xl:text-[34px]  text-[#fff] leading-[24px] lg:leading-[22px] px-[10px]">Daily Challenges</span>
               </SlideCarousel>
             </div>
           </div>
 
-          <h2 className="hidden lg:block font-black text-center mt-[50px] text-[34px] lg:text-[120px] leading-[50px] lg:leading-[120px] text-[#000] px-[25px] lg:px-0 normal-case lg:uppercase">Play With friends around the world</h2>
-          <p className="block lg:hidden font-black text-center mt-[50px] text-[34px] lg:text-[120px] leading-[50px] lg:leading-[120px] text-[#000] px-[25px] lg:px-0 normal-case lg:uppercase">Play With friends around the world</p>
+          <h2 className="hidden lg:block font-black text-center mt-[50px] text-[34px] lg:text-[90px] 2xl:text-[120px] leading-[100%] text-[#000] px-[25px] lg:px-0 normal-case lg:uppercase">Play With friends around the world</h2>
+          <p className="block lg:hidden font-black text-center mt-[50px] text-[34px] leading-[50px] text-[#000] px-[25px] normal-case">Play With friends around the world</p>
       </section>
 
       <section className="home-progressing-slide mb-12 bg-gradient-to-b from-[#f6f6f6] to-[#eaeaea]">
-        <div className="p-0 pt-[15px] lg:pt-0 lg:p-24 flex">
+        <div className="p-0 pt-[15px] lg:pt-24 lg:p-12 2xl:p-24">
             <div className="block">
-              <div className="flex flex-col lg:flex-row homepage-text-image-slider-item">
+              <div className="flex flex-col lg:flex-row homepage-text-image-slider-item w-full">
                 <div className="w-full lg:w-6/12 p-6 lg:p-0 lg:pr-4">
-                  <h2 className="hidden lg:block text-[#000] text-[24px] lg:text-[55px] font-black leading-[24px] lg:leading-[66px] normal-case lg:uppercase">The world's first smart mini hoop game console</h2>
-                  <p className="block lg:hidden text-[#000] text-[24px] lg:text-[55px] font-black leading-[24px] lg:leading-[66px] normal-case lg:uppercase">The world's first smart mini hoop game console</p>
+                  <h2 className="hidden lg:block text-[#000] text-[24px] lg:text-[40px] 2xl:text-[55px] font-black leading-[24px] lg:leading-[50px] 2xl:leading-[66px] normal-case lg:uppercase">The world's first smart mini hoop game console</h2>
+                  <p className="block lg:hidden text-[#000] text-[24px] lg:text-[40px] 2xl:text-[55px] font-black leading-[24px] lg:leading-[50px] 2xl:leading-[66px] normal-case lg:uppercase">The world's first smart mini hoop game console</p>
                   <div className="slider-dots flex flex-col relative pl-[20px] mt-[20px]">
-                    
+                    <span className="slider-dots-fade-top absolute w-full top-0 left-[15px] pointer-events-none z-20" style={{height: (progressingSlide <= 8 ? 0 : progressingSlide) + '%'}}></span>
                     {slideWithText.map((sliderDot, index2) => (
                       <div
                         className={`${
-                          slideActive == index2 ? 'active text-[#0071E3] text-[20px] lg:text-[34px] font-bold' : 'text-[16px] lg:text-[24px] font-normal text-[#000] opacity-40'
-                        } leading-normal cursor-pointer transition-all`}
+                          slideActive == index2 ? 'active z-40 text-[#0071E3] text-[20px] lg:text-[28px] 2xl:text-[34px] font-bold' : 'z-10 text-[16px] lg:text-[20px] 2xl:text-[24px] font-normal text-[#000] opacity-40'
+                        } leading-[110%] cursor-pointer transition-all relative`}
                         key={index2}
                         onClick={() => {
+                          setslideActive(index2);
+                          setSlideActiveVideo(
+                            sliderDot.video ? sliderDot.video : '',
+                          );
+                          setProgressingSlide( index2 + 1 != slideWithText.length ?  ( progressingSlide2 * ( index2 + 1 ) ) - 3 : progressingSlide2 * ( index2 + 1 ) );
+                          setSlideActiveImage(sliderDot.image);
+                        }}
+                        onMouseEnter={() => {
                           setslideActive(index2);
                           setSlideActiveVideo(
                             sliderDot.video ? sliderDot.video : '',
@@ -630,6 +585,7 @@ export default function Homepage() {
                     <span className="absolute h-full top-0 left-0 bg-[#D9D9D9] w-[6px] rounded-[120px]">
                       <span className="absolute top-0 left-0 w-full bg-[#0071E3] transition-all rounded-[120px]" style={{height: progressingSlide + '%'}}></span>
                     </span>
+                    <span className="slider-dots-fade-bottom absolute w-full bottom-0 left-[15px] pointer-events-none z-20" style={{height: (100 - progressingSlide) + '%'}}></span>
                   </div>
                   
                 </div>
@@ -660,10 +616,10 @@ export default function Homepage() {
         </div>
       </section>
 
-      <section className="app-logos px-8 pt-[30px] lg:pt-0 lg:px-24 mb-12">
+      <section className="app-logos px-8 pt-[30px] lg:pt-0 lg:px-12 2xl:px-24 mb-12">
         <div className="text-center">
-          <h2 className="text-[#000] text-[50px] lg:text-[120px] leading-[50px] lg:leading-[120px] font-black mb-[30px] lg:mb-[15px] normal-case lg:uppercase">A full smart TV</h2>
-          <p className="text-[#000] text-[20px] lg:text-[24px] leading-[30px] lg:leading-[36px]">Stream your favorite apps while you play</p>
+          <h2 className="text-[#000] text-[50px] lg:text-[120px] leading-[100%] font-black mb-[30px] lg:mb-[15px] normal-case lg:uppercase">A full smart TV</h2>
+          <p className="text-[#000] text-[20px] 2xl:text-[24px] leading-[30px] 2xl:leading-[36px]">Stream your favorite apps while you play</p>
         </div>
 
         {smartTVApps.length !== 0 && <>
@@ -679,8 +635,8 @@ export default function Homepage() {
 
       <section className="huupe-specs px-8 lg:pl-0 lg:pr-0 pt-4 lg:pt-6 pb-8">
         <div className="flex flex-wrap lg:flex-nowrap">
-          <div className="w-full lg:w-6/12 pr-0 lg:pr-12 lg:pl-24">
-            <h2 className="text-heading mb-10 font-black"><img className="-ml-[10px] h-[40px] lg:h-[65px] inline-block" src={huupeNewLogo} />mini SPECS</h2>
+          <div className="w-full lg:w-6/12 pr-0 lg:pr-12 lg:pl-12 2xl:pl-24">
+            <h2 className="text-heading mb-10 font-black"><img className="-ml-[10px] h-[40px] 2xl:h-[65px] inline-block" src={huupeNewLogo} />mini SPECS</h2>
             <div className="spec-detail">
               <h3 className="mb-[5px] lg:mb-3">Physical Dimension</h3>
               <table className="hidden lg:table">
@@ -873,15 +829,6 @@ const HOMEPAGE_SEO_QUERY = `#graphql
   ${COLLECTION_CONTENT_FRAGMENT}
 ` as const;
 
-const COLLECTION_HERO_QUERY = `#graphql
-  query heroCollectionContent($handle: String, $country: CountryCode, $language: LanguageCode)
-  @inContext(country: $country, language: $language) {
-    hero: collection(handle: $handle) {
-      ...CollectionContent
-    }
-  }
-  ${COLLECTION_CONTENT_FRAGMENT}
-` as const;
 
 // @see: https://shopify.dev/api/storefront/2023-07/queries/products
 export const HOMEPAGE_FEATURED_PRODUCTS_QUERY = `#graphql
@@ -894,27 +841,4 @@ export const HOMEPAGE_FEATURED_PRODUCTS_QUERY = `#graphql
     }
   }
   ${PRODUCT_CARD_FRAGMENT}
-` as const;
-
-// @see: https://shopify.dev/api/storefront/2023-07/queries/collections
-export const FEATURED_COLLECTIONS_QUERY = `#graphql
-  query homepageFeaturedCollections($country: CountryCode, $language: LanguageCode)
-  @inContext(country: $country, language: $language) {
-    collections(
-      first: 4,
-      sortKey: UPDATED_AT
-    ) {
-      nodes {
-        id
-        title
-        handle
-        image {
-          altText
-          width
-          height
-          url
-        }
-      }
-    }
-  }
 ` as const;

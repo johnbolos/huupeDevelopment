@@ -5,7 +5,7 @@ import Slider from 'react-slick';
 function CustomSlideshow({
   children,
   className,
-  newState,
+  newState = 1,
   centerMode = true,
   autoPlay = true,
   numberSlides = 1,
@@ -17,11 +17,12 @@ function CustomSlideshow({
   autoPlay: boolean;
   numberSlides: number;
 }) {
-  const slider: MutableRefObject<Slider> | undefined = useRef(undefined);
+  // const slider: MutableRefObject<Slider> | undefined = useRef(undefined);
+  const slider = useRef<Slider | null>(null);
 
   if( newState ){
     useEffect(() => {
-      slider?.current.slickGoTo(newState);
+      slider?.current?.slickGoTo(newState);
     }, [newState]);
   }
   
@@ -35,7 +36,7 @@ function CustomSlideshow({
     variableWidth: centerMode,
     swipeToSlide: true,
     centerMode: centerMode,
-    speed: 1000,
+    speed: 300,
     cssEase: 'linear',
     autoplaySpeed: isAutoPlay ? 5000 : 0,
     adaptiveHeight: !centerMode,

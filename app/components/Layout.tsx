@@ -5,7 +5,9 @@ import {Suspense, useEffect, useMemo, useState, useRef} from 'react';
 import emailjs from '@emailjs/browser';
 import {CartForm} from '@shopify/hydrogen';
 
-import logoImage from '../images/huupeNewLogo.webp';
+// import logoImage from '../images/huupeNewLogo.webp';
+import logoImage from '../images/huupeLogoSVG.svg';
+
 import huupeNewLogo from '../images/huupeMiniHeading.webp';
 
 import type {LayoutQuery} from 'storefrontapi.generated';
@@ -111,12 +113,12 @@ function Header({title, menu}: {title: string; menu?: EnhancedMenu}) {
   }, [addToCartFetchers, isCartOpen, openCart]);
 
   const headerMenuItems = [
-    {
-      name: 'home page',
-      url: '/',
-      target: '_self',
-      title: 'home page',
-    },
+    // {
+    //   name: 'home page',
+    //   url: '/',
+    //   target: '_self',
+    //   title: 'home page',
+    // },
     {
       name: 'mini',
       url: '/pages/huupe-mini',
@@ -130,10 +132,10 @@ function Header({title, menu}: {title: string; menu?: EnhancedMenu}) {
       title: 'huupe PRO',
     },
     {
-      name: 'Buy',
+      name: 'Shop Now',
       url: '/pages/buy',
       target: '_self',
-      title: 'Buy',
+      title: 'Shop Now',
     },
   ];
 
@@ -204,6 +206,7 @@ export function MenuDrawer({
 }
 
 function MenuMobileNav({menu, onClose}: {menu: []; onClose: () => void}) {
+  const currentURL = useIsHomePath(true);
   const socials = [
     {
       logo: tiktok,
@@ -234,9 +237,9 @@ function MenuMobileNav({menu, onClose}: {menu: []; onClose: () => void}) {
 
   return (
     <>
-      <section className="main-footer main-footer-nav grayfooter px-6 lg:px-24 pb-12 lg:pb-24 pt-6 lg:pt-12">
+      <section className="main-footer main-footer-nav grayfooter px-6 lg:px-12 2xl:px-24 pb-12 lg:pb-24 pt-6 lg:pt-12">
         <div className="flex flex-wrap">
-          <div className="w-full lg:w-7/12 p-0 lg:pr-4">
+          <div className="w-full lg:w-8/12 xl:w-7/12 p-0 lg:pr-4">
             <div className="flex footer-newsletter flex-wrap">
               <div className="w-full lg:w-6/12 pb-6 lg:pb-0 lg:pr-[30px]">
                 <img
@@ -250,6 +253,26 @@ function MenuMobileNav({menu, onClose}: {menu: []; onClose: () => void}) {
               </div>
               <div className="w-full lg:w-6/12 pb-6 lg:pb-0">
                 <div className="flex flex-wrap">
+                  <div className="footer-menu lg:hidden">
+                    <h4>Menu</h4>
+                    <ul>
+                      
+                        {(menu || []).map((item, index) => (
+                          <li>
+                            <Link
+                              key={item.url}
+                              to={item.url}
+                              target={item.target}
+                              prefetch="intent"
+                              className={`pb-1 ${currentURL.indexOf('/products/') >= 0 ? 'hidden' : ''}`}
+                            >
+                              {index == 0 || index == 1 ? 'huupe ' : null}
+                              {index == 0 || index == 1 ? <span className="font-bold font-[League Spartan]">{item.name}</span> : item.name}
+                            </Link>
+                          </li>
+                        ))}
+                    </ul>
+                  </div>
                   <div className="footer-menu">
                     <h4>Product</h4>
                     <ul>
@@ -378,7 +401,7 @@ function MenuMobileNav({menu, onClose}: {menu: []; onClose: () => void}) {
                           target="_self"
                           prefetch="intent"
                           className={({isActive}) =>
-                            isActive ? 'pb-1' : 'pb-1'
+                            isActive ? 'pb-1 whitespace-nowrap' : 'pb-1 whitespace-nowrap'
                           }
                           onClick={() => onClose()}
                         >
@@ -392,7 +415,7 @@ function MenuMobileNav({menu, onClose}: {menu: []; onClose: () => void}) {
                           target="_self"
                           prefetch="intent"
                           className={({isActive}) =>
-                            isActive ? 'pb-1' : 'pb-1'
+                            isActive ? 'pb-1 whitespace-nowrap' : 'pb-1 whitespace-nowrap'
                           }
                           onClick={() => onClose()}
                         >
@@ -420,8 +443,8 @@ function MenuMobileNav({menu, onClose}: {menu: []; onClose: () => void}) {
               </div>
             </div>
           </div>
-          <div className="w-full lg:w-5/12 p-0">
-            <div className="flex flex-wrap gap-[25px] justify-start lg:justify-end footer-socials">
+          <div className="w-full lg:w-4/12 xl:w-5/12 p-0">
+            <div className="flex flex-wrap gap-[25px] justify-between lg:justify-end footer-socials">
               {socials.map((social, index) => (
                 <div
                   className="footer-social"
@@ -677,7 +700,7 @@ function DesktopHeader({
         currentURL.indexOf('/pages/press') >= 0
           ? ' light-header '
           : ''
-      }hidden lg:flex items-center transition duration-300 z-40 top-0 justify-between w-full leading-none gap-8 px-24 py-12 main-header${
+      }hidden lg:flex items-center transition duration-300 z-40 top-0 justify-between w-full leading-none gap-8 lg:px-12 2xl:px-24 py-8 2xl:py-12 main-header${
         scrollDir == 'down' ? ' translate-y-[-100%]' : ''
       }`}
     >
@@ -701,9 +724,7 @@ function DesktopHeader({
         </div>
 
         <nav
-          className={`${
-            currentURL.indexOf('/products/') >= 0 ? 'hidden' : 'flex'
-          } header-nav-items`}
+          className={`header-nav-items flex`}
         >
           <Link to="/" prefetch="intent">
             <img
@@ -721,10 +742,10 @@ function DesktopHeader({
               to={item.url}
               target={item.target}
               prefetch="intent"
-              className={({isActive}) => (isActive ? 'pb-1' : 'pb-1')}
+              className={`pb-1 ${currentURL.indexOf('/products/') >= 0 ? 'hidden' : ''}`}
             >
-              {index == 1 || index == 2 ? <img className="h-[26px] inline-block" src={huupeNewLogo} /> : null}
-              {index == 2 ? <span className="font-bold font-[League Spartan]">{item.name}</span> : item.name}
+              {index == 0 || index == 1 ? <img className="h-[26px] inline-block" src={logoImage} /> : null}
+              {index == 1 ? <span className="font-bold font-[League Spartan]">{item.name}</span> : item.name}
             </Link>
           ))}
         </nav>
@@ -915,17 +936,17 @@ function Footer({menu}: {menu?: EnhancedMenu}) {
       <section className={`beforeFooter relative text-center mb-[80px] ${currentURL.indexOf('/huupe-pro') >= 0 ? '' : 'lg:-mb-[80px]'} z-20 px-[25px] lg:px-0`}>
         <img
           src={currentURL.indexOf('/huupe-pro') >= 0 ? beforeFooter2 : beforeFooter}
-          className={`relative z-2 inline-block ${currentURL.indexOf('/huupe-pro') >= 0 ? 'h-[609px] lg:h-auto object-cover' : '' }`}
+          className={`relative z-2 inline-block ${currentURL.indexOf('/huupe-pro') >= 0 ? 'h-[609px] lg:h-[700px] 2xl:h-auto object-cover' : 'lg:max-h-[700px] 2xl:max-h-[none]' }`}
           alt="Huupe Overlay"
         />
-        <div className={`p-6 pb-0 lg:pr-24 lg:pl-24 ${ currentURL.indexOf('/huupe-pro') >= 0 ? '-mt-[300px] lg:-mt-[400px]' : '-mt-[60px] lg:-mt-[120px]'}`}>
-          <h2 className={`mb-12 text-[#000] text-[${ currentURL.indexOf('/huupe-pro') >= 0 ? '34px' : '50px' }] lg:text-[151px] font-black leading-[60px] lg:leading-[151px]`}>{ currentURL.indexOf('/huupe-pro') >= 0 ? 'RESERVE NOW' : 'GET STARTED' }</h2>
+        <div className={`p-6 pb-0 lg:pr-24 lg:pl-24 ${ currentURL.indexOf('/huupe-pro') >= 0 ? '-mt-[300px] 2xl:-mt-[400px]' : '-mt-[60px] lg:-mt-[90px] 2xl:-mt-[120px]'}`}>
+          <h2 className={`font-[Montserrat] mb-12 text-[#000] text-[${ currentURL.indexOf('/huupe-pro') >= 0 ? '34px' : '50px' }] lg:text-[101px] 2xl:text-[151px] font-black leading-[60px] lg:leading-[100%]`}>{ currentURL.indexOf('/huupe-pro') >= 0 ? 'RESERVE NOW' : 'GET STARTED' }</h2>
           { currentURL.indexOf('/huupe-pro') >= 0 ? 
           null
           :
           <Link
-            key="/products/the-huupe"
-            to="/products/the-huupe"
+            key="/products/huupe-classic"
+            to={`/products/huupe-classic`}
             target="_self"
             prefetch="intent"
             className="main-button normal-case "
@@ -955,7 +976,7 @@ function Footer({menu}: {menu?: EnhancedMenu}) {
       <section
         className={`${
           isHome ? 'grayfooter' : ''
-        } main-footer px-6 py-16 lg:px-24 lg:pb-24 lg:pt-48 bg-[#ffffff]`}
+        } main-footer px-6 py-16 lg:px-12 2xl:px-24 lg:pb-24 lg:pt-48 bg-[#ffffff]`}
       >
         <div className="flex flex-wrap relative z-10">
           <div className="w-full lg:w-7/12 lg:pr-4">
@@ -1139,14 +1160,14 @@ function Footer({menu}: {menu?: EnhancedMenu}) {
                   articles.
                 </p>
               </div>
-              <div className="w-full mt-8 lg:mt-0">
+              <div className="w-full mt-0">
                 <div
                   className="klaviyo-form-XuDzpq"
                   onClick={() => klaviyoTrigger()}
                 ></div>
               </div>
             </div>
-            <div className="flex flex-wrap lg:justify-between lg:justify-start gap-[15px] lg:gap-[25px] footer-socials pt-[25px]">
+            <div className="flex flex-wrap justify-between lg:justify-start gap-[15px] lg:gap-[25px] footer-socials pt-[25px]">
               {socials.map((social, index) => (
                 <div
                   className="footer-social"

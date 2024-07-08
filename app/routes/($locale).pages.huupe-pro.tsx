@@ -8,6 +8,7 @@ import {
   Link,
 } from '~/components';
 import CustomSlideshow from '../components/CustomSlideshow';
+import HoverSlideItem from '../components/HoveredSlideItem';
 import {MEDIA_FRAGMENT, PRODUCT_CARD_FRAGMENT} from '~/data/fragments';
 import {getHeroPlaceholder} from '~/lib/placeholders';
 import {seoPayload} from '~/lib/seo.server';
@@ -138,6 +139,9 @@ export default function Installation() {
   const [slideActiveVideo, setSlideActiveVideo] =
     useState<string>(trackDataVideo);
   const [slideActiveImage, setSlideActiveImage] = useState<string>(trackData);
+
+  const [activeSlideIndex, setActiveSlideIndex] = useState(-1);
+  const [hasActive, setHasActive] = useState(false);
   const slideWithText = [
     {
       image: nbalevel,
@@ -431,16 +435,6 @@ export default function Installation() {
       experience: '',
       founder: 'Head & Heart Hoops',
     },
-    {
-      image: alison_zingale,
-      imgAlt: 'A young female trainer holding a basketball',
-      name: 'Allison Zingale',
-      skills: 'Stretching, Yoga, Mindfulness, Rehabilitation',
-      collegiate: '',
-      professional: '',
-      experience: 'Certified Yoga Instructor and PT',
-      founder: '',
-    },
   ];
 
   const [activeTrainer, setActiveTrainer] = useState(trainers[0]);
@@ -543,6 +537,10 @@ export default function Installation() {
     setZipcode('');
   }
 
+
+
+  const [hoverActiveSlide, setHoverActiveSlide] = useState(-1);
+
   return (
     <>
       {modalOpen ? (
@@ -563,15 +561,15 @@ export default function Installation() {
         <></>
       )}
 
-      <section className="homepage-banner px-6 lg:px-24 mb-6 lg:mb-12 pt-[50px] lg:pt-[146px]">
+      <section className="homepage-banner px-6 lg:px-12 2xl:px-24 mb-6 lg:mb-12 pt-[50px] lg:pt-[146px]">
         <div className="relative">
           <img src={homepagebanner} />
           
           <div className="absolute top-0 left-0 w-full h-full flex flex-col text-center items-center justify-end pb-[150px] lg:pb-[250px]">
             <h1 className="mb-3 !text-[#000] !font-black max-w-[1082px] mx-auto w-full block !text-[Montserrat]">THE WORLD'S FIRST SMART BASKETBALL HOOP</h1>
             <Link
-              key="/products/the-huupe"
-              to="/products/the-huupe"
+              key="/products/huupe-pro"
+              to={`/products/huupe-pro`}
               target="_self"
               prefetch="intent"
               className="main-button"
@@ -583,32 +581,23 @@ export default function Installation() {
       </section>
 
 
-      <section className="px-0 lg:px-24 mb-12 lg:mb-0">
+      <section className="px-0 lg:px-12 2xl:px-24 mb-12 lg:mb-0">
         <div className="hidden lg:flex flex-wrap -mx-[5px]">
           {slideWithText.map((slide,index) => (
-            <div className="w-full lg:w-3/12 loop-item px-[5px] cursor-pointer" key={index} onClick={() => {
-              setActiveTestimonial(slide.video);
-              setModalOpen(true);
-            }}>
-              <div className="relative rounded-[20px] h-full overflow-hidden min-h-[400px] lg:h-[80vh] max-h-[940px]">
-                <img className="object-cover h-full w-full" src={slide.image} alt={slide.heading + ' ' + index} />
-                <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-[#00000000] to-[#00000099]"></div>
-                <div className={`absolute bottom-0 left-0 w-full text-center py-[30px] px-[${index == 0 ? '40px' : ( index == 1 ? '30px' : '5px' )}] z-20`}>
-                  <h3 className="text-[#fff] text-[48px] font-black leading-[58px] !text-[Montserrat]">{slide.heading}</h3>
-                </div>
-              </div>
-            </div>
+            <HoverSlideItem key={index} index={index} slide={slide} setHasActive={setHasActive} hasActive={hasActive} activeSlideIndex={activeSlideIndex} setActiveSlideIndex={setActiveSlideIndex}/>
           ))}
         </div>
         <div className="block lg:hidden">
-          <CustomSlideshow className="has-slick-arrows" centerMode={false} autoPlay={false}>
+          <CustomSlideshow newState={1} numberSlides={1} className="has-slick-arrows" centerMode={false} autoPlay={false}>
             {slideWithText.map((slide,index) => (
               <div className="w-full lg:w-3/12 loop-item lg:px-[5px]" key={index} onClick={() => {
                 setActiveTestimonial(slide.video);
                 setModalOpen(true);
               }}>
                 <div className="relative lg:rounded-[20px] overflow-hidden min-h-[400px] h-[80vh] max-h-[940px]">
+                  <LazyLoad className="h-full w-full">
                   <img className="object-cover h-full w-full" src={slide.image} alt={slide.heading + ' ' + index} />
+                  </LazyLoad>
                   <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-[#00000000] to-[#00000099]"></div>
                   <div className={`absolute bottom-0 left-0 w-full text-center py-[30px] px-[${index == 0 ? '40px' : ( index == 1 ? '30px' : '5px' )}] z-20`}>
                     <h3 className="text-[#fff] text-[48px] font-black leading-[58px] !text-[Montserrat]">{slide.heading}</h3>
@@ -624,6 +613,7 @@ export default function Installation() {
         <div className="homepage-slider-wrapper">
           {homeSlider.map((slider, index) => (
             <div className="homepage-slider-item relative" key={index}>
+              <LazyLoad>
               <img
                 alt={slider.alt}
                 src={slider.image}
@@ -631,12 +621,15 @@ export default function Installation() {
                   slider.imageMobile !== '' ? 'hidden md:block' : ''
                 } w-full object-cover`}
               />
+              </LazyLoad>
               {slider.imageMobile !== '' ? (
-                <img
+                <LazyLoad>
+                  <img
                   alt={slider.alt}
                   src={slider.imageMobile}
                   className="md:hidden w-full object-cover"
                 />
+                </LazyLoad>
               ) : (
                 <></>
               )}
@@ -646,33 +639,39 @@ export default function Installation() {
         </div>
       </section>
 
-      <section className="text-image howitworks-text-image-2 px-0 lg:px-24 pb-12 lg:pb-16">
+      <section className="text-image howitworks-text-image-2 px-0 lg:px-12 2xl:px-24 pb-12 lg:pb-16">
         <div className="flex gap-4 flex-wrap lg:flex-nowrap">
           <div className="w-full lg:w-7/12 pr-4 hidden lg:block">
+            <LazyLoad className="h-full w-full">
             <img
               src={easyToUseApp}
               className="h-full w-full object-cover object-left image-bordered"
             />
+            </LazyLoad>
           </div>
           <div className="w-full block lg:hidden mobile-easytouse text-center">
+            <LazyLoad>
             <img
               src={easyToUseAppCPMobile}
               alt="A screen of the huupe application"
               className="inline-block lg:hidden image-bordered"
             />
+            </LazyLoad>
           </div>
-          <div className="w-full lg:w-5/12 lg:pl-[40px] px-6 lg:pr-0 pt-8 lg:pt-0">
+          <div className="w-full lg:w-5/12 lg:px-[20px] 2xl:pl-[40px] px-6 lg:pr-0 pt-8 lg:pt-0">
+            <LazyLoad>
             <img
               src={easyToUseAppCP}
               className="mb-[15px] hidden lg:block object-cover object-top h-auto max-h-[311px] w-full max-w-[350px] me-auto"
             />
-            <h2 className="text-[50px] lg:!text-[68px] text-heading mb-2">EASY TO USE MOBILE APP</h2>
-            <p className="text-[16px] lg:text-[25px]">
+            </LazyLoad>
+            <h2 className="text-[50px] lg:!text-[50px] 2xl:!text-[68px] text-heading mb-2">EASY TO USE MOBILE APP</h2>
+            <p className="text-[16px] lg:text-[20px] 2xl:text-[25px]">
             Stream our mobile app right to the huupe and play.
             </p>
             <Link
-              key="/products/the-huupe"
-              to="/products/the-huupe"
+              key="/products/huupe-pro"
+              to={`/products/huupe-pro`}
               target="_self"
               prefetch="intent"
               className="main-button mt-3"
@@ -684,8 +683,25 @@ export default function Installation() {
       </section>
 
 
-      <section className="stats-section px-6 lg:px-24 pb-24 hidden lg:block">
-        <div className="stats-wrapper relative">
+      <section className="stats-section px-6 lg:px-12 2xl:px-24 pb-24 hidden lg:block">
+        <div className="flex">
+          <div className="col-8">
+            <LazyLoad>
+            <img src={statsBG} className="w-full"/>
+            </LazyLoad>
+          </div>
+          <div className="col-4">
+            <div className="stats-details __absolute __top-0 __right-0 lg:pr-24 2xl:pr-36 pt-10">
+                {stats.map((stat, index) => (
+                <div className="text-center py-[10px] relative" key={index}>
+                    <h2>{stat.bigtext}</h2>
+                    <p>{stat.title}</p>
+                </div>
+                ))}
+            </div>
+          </div>
+        </div>
+        {/* <div className="stats-wrapper relative">
             <img src={statsBG} className=""/>
             <div className="stats-details absolute top-0 right-0 pr-36 pt-10">
                 {stats.map((stat, index) => (
@@ -695,10 +711,10 @@ export default function Installation() {
                 </div>
                 ))}
             </div>
-        </div>
+        </div> */}
       </section>
 
-      <section className="huupe-specs huupe-specs-pro px-6 lg:pl-24 lg:pr-0 pt-4 lg:pt-6 pb-8 lg:pb-12">
+      <section className="huupe-specs huupe-specs-pro px-6 lg:pl-12 2xl:pl-24 lg:pr-0 pt-4 lg:pt-6 pb-8 lg:pb-12">
         <div className="flex flex-wrap lg:flex-nowrap">
           <div className="w-full lg:w-5/12 pr-0 lg:pr-24">
           <h2 className="text-heading mb-10 font-black"><img className="-ml-[10px] h-[40px] lg:h-[65px] inline-block" src={huupeNewLogo} />PRO SPECS</h2>
@@ -773,13 +789,15 @@ export default function Installation() {
             </div>
           </div>
           <div className="w-full lg:w-7/12 hidden lg:block">
+            <LazyLoad className="w-full h-full">
             <img src={huupeSpecs} className="object-cover h-full w-full" />
+            </LazyLoad>
           </div>
         </div>
       </section>
 
 
-      <section className="text-image howitworks-text-image px-6 lg:px-24 mb-0 pb-12">
+      <section className="text-image howitworks-text-image px-6 lg:px-12 2xl:px-24 mb-0 pb-12">
         <div className="flex flex-wrap items-stretch lg:flex-nowrap gap-4">
           <div className="w-full lg:w-6/12 mt-6 lg:mt-0">
             <div className="block lg:hidden pb-[30px]">
@@ -799,7 +817,7 @@ export default function Installation() {
                 muted
                 playsInline
                 poster={drakeImage}
-                className="w-full h-full !rounded-none !lg:rounded-[20px] object-cover"
+                className="w-full h-full !rounded-none lg:!rounded-[20px] object-cover"
               >
                 <source src={drake} type="video/mp4" />
                 <source src={drake} type="video/webm" />
@@ -819,7 +837,7 @@ export default function Installation() {
                 <div className="flex flex-wrap justify-start pt-[20px] pb-[25px] !gap-x-[10px] !gap-y-[20px] lg:gap-x-[15px] lg:gap-y-[30px]">
                     {smartTVApps.map((logo,index,elements) => (
                         <LazyLoad key={index} >
-                        <img src={logo} alt={`Logo ${index+1}`} className="!w-[60px] !h-[60px] lg:w-[124px] lg:h-[124px] !rounded-[10px]"/>
+                        <img src={logo} alt={`Logo ${index+1}`} className="!w-[60px] !h-[60px] lg:!w-[80px] 2xl:!w-[124px] lg:!h-[80px] 2xl:!h-[124px] !rounded-[10px]"/>
                         </LazyLoad>
                     ))}
                 </div>
@@ -830,12 +848,12 @@ export default function Installation() {
       </section>
 
 
-      <section className="the-trainer px-6 lg:px-24 relative mb-12 lg:mb-24">
+      <section className="the-trainer px-6 lg:px-12 2xl:px-24 relative mb-12 lg:mb-24">
         <div className="the-trainer-background content-none absolute top-1/2 lg:top-0 left-[-20%] md:left-1/3 w-[793px] lg:w-[1568px] h-[793px] lg:h-[1568px]" />
-        <h3 className="text-[48px] leading-[100%] text-[#000] font-black lg:uppercase mb-0 hidden lg:block">Our Trainers</h3>
+        <h3 className="lg:text-[40px] 2xl:text-[48px] leading-[100%] text-[#000] font-black lg:uppercase mb-0 hidden lg:block">Our Trainers</h3>
         <div className="flex relative items-center z-10 flex-wrap">
           <div className="w-full lg:w-5/12 basis-full lg:basis-5/12 pt-0 lg:pt-8 pb-8 lg:pb-24">
-            <h2 className="text-[#000] mb-6 uppercase text-[72px] font-black font-[Montserrat] leading-[105%] max-w-[400px]">{activeTrainer.name}</h2>
+            <h2 className="text-[#000] mb-6 uppercase lg:text-[50px] 2xl:text-[72px] font-black font-[Montserrat] leading-[105%] max-w-[400px]">{activeTrainer.name}</h2>
             <ul className="text-[#000]">
               {activeTrainer.skills ? (
                 <li>
@@ -876,7 +894,9 @@ export default function Installation() {
           </div>
           <div className="w-full lg:w-7/12 basis-full lg:basis-7/12 relative">
             
-            <img width="456" height="539" src={activeTrainer.image} alt={activeTrainer.imgAlt} className="h-[400px] md:h-[600px] lg:h-[888px] w-auto" />
+            <LazyLoad>
+              <img width="456" height="539" src={activeTrainer.image} alt={activeTrainer.imgAlt} className="h-[400px] md:h-[600px] lg:h-[600px] 2xl:h-[888px] w-auto object-contain object-bottom" />
+            </LazyLoad>
             
           </div>
         </div> 
@@ -899,7 +919,7 @@ export default function Installation() {
               className="activeTrainerNext absolute bottom-[10px] lg:bottom-[30px] left-0 block p-4 cursor-pointer z-20"
               onClick={() => prevTrainer()}
             >
-              <svg width="87" height="88" viewBox="0 0 87 88" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-[40px] lg:w-[87px]">
+              <svg width="87" height="88" viewBox="0 0 87 88" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-[40px] 2xl:w-[87px]">
                 <path d="M43.4981 30.6377L30.2879 43.9998L43.4981 57.3618L47.2834 53.5331L40.577 46.7497L57.0918 46.7497L57.0918 41.2499L40.577 41.2499L47.2834 34.4664L43.4981 30.6377ZM43.4921 9.16652C48.2551 9.16652 52.7321 10.0807 56.9231 11.9092C61.1141 13.7376 64.7597 16.219 67.8599 19.3534C70.9601 22.4879 73.4144 26.1738 75.2229 30.4111C77.0313 34.6484 77.9356 39.1759 77.9355 43.9936C77.9355 48.8114 77.0317 53.3398 75.224 57.579C73.4164 61.8182 70.9632 65.5057 67.8644 68.6415C64.7656 71.7774 61.1216 74.2599 56.9324 76.0891C52.7433 77.9184 48.2672 78.833 43.5042 78.833C38.7412 78.833 34.2642 77.9188 30.0732 76.0903C25.8822 74.2619 22.2366 71.7805 19.1364 68.6461C16.0362 65.5116 13.5818 61.8257 11.7734 57.5884C9.96495 53.3512 9.06072 48.8237 9.06072 44.0059C9.06072 39.1881 9.96456 34.6597 11.7722 30.4205C13.5799 26.1813 16.0331 22.4938 19.1319 19.358C22.2307 16.2222 25.8747 13.7396 30.0639 11.9104C34.253 10.0811 38.7291 9.16652 43.4921 9.16652Z" fill="black"/>
               </svg>
             </span>
@@ -907,7 +927,7 @@ export default function Installation() {
               className="activeTrainerNext absolute bottom-[10px] lg:bottom-[30px] right-0 block p-4 cursor-pointer z-20"
               onClick={() => nextTrainer()}
             >
-              <svg width="87" height="88" viewBox="0 0 87 88" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-[40px] lg:w-[87px]">
+              <svg width="87" height="88" viewBox="0 0 87 88" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-[40px] 2xl:w-[87px]">
                 <path d="M43.5019 57.3623L56.7121 44.0002L43.5019 30.6382L39.7166 34.4669L46.423 41.2503H29.9082V46.7501H46.423L39.7166 53.5336L43.5019 57.3623ZM43.5079 78.8335C38.7449 78.8335 34.2679 77.9193 30.0769 76.0908C25.8859 74.2624 22.2403 71.781 19.1401 68.6466C16.0399 65.5121 13.5856 61.8262 11.7771 57.5889C9.96868 53.3516 9.06445 48.8241 9.06445 44.0064C9.06445 39.1886 9.96829 34.6602 11.776 30.421C13.5836 26.1818 16.0368 22.4943 19.1356 19.3585C22.2344 16.2226 25.8784 13.7401 30.0676 11.9109C34.2567 10.0816 38.7328 9.16699 43.4958 9.16699C48.2588 9.16699 52.7358 10.0812 56.9268 11.9097C61.1178 13.7381 64.7634 16.2195 67.8636 19.3539C70.9638 22.4884 73.4181 26.1742 75.2266 30.4116C77.035 34.6488 77.9393 39.1763 77.9393 43.9941C77.9393 48.8119 77.0354 53.3403 75.2278 57.5795C73.4201 61.8187 70.9669 65.5062 67.8681 68.642C64.7693 71.7778 61.1253 74.2604 56.9361 76.0896C52.747 77.9189 48.2709 78.8335 43.5079 78.8335Z" fill="black"/>
               </svg>
             </span>
@@ -915,17 +935,17 @@ export default function Installation() {
       </section>
 
 
-      <section className="px-6 lg:px-24 bg-[#fff] mb-12">
+      <section className="px-6 lg:px-12 2xl:px-24 bg-[#fff] mb-12">
         <h2 className="text-[48px] font-black leading-[100%] mb-[40px]">OUR CUSTOMERS</h2>
-        <CustomSlideshow className="-mx-[7px] has-slick-arrows" centerMode={false} autoPlay={false} numberSlides={3}>
+        <CustomSlideshow className="-mx-[7px] has-slick-arrows" centerMode={false} autoPlay={false} numberSlides={3} newState={1}>
           {testimonials.map((testimony, index) => (
             <div className="customer-item px-[7px]" key={index}>
               <div className="relative rounded-[20px] overflow-hidden">
-                <img src={testimony.img} alt={testimony.altText} className="h-[589px] lg:h-[826px] w-[auto] object-cover"/>
+                  <img src={testimony.img} alt={testimony.altText} className="h-[589px] 2xl:h-[826px] w-[auto] object-cover"/>
 
                 <div className="h-auto lg:h-[210px] absolute bottom-0 left-0 w-full p-[20px] lg:p-[30px] bg-[#000000B2] rounded-[20px]">
                   <p className="font-bold uppercase lg:mb-[10px] text-[#fff] !text-[24px]">{testimony.name}</p>
-                  <p className="!text-[16px] lg:!text-[24px] text-[#fff]">"{testimony.message}"</p>
+                  <p className="!text-[16px] 2xl:!text-[24px] text-[#fff]">"{testimony.message}"</p>
                 </div>
               </div>
             </div>
@@ -933,7 +953,7 @@ export default function Installation() {
         </CustomSlideshow>
       </section>
 
-      <section className="px-6 lg:px-24 bg-[#ffffff] mb-12">
+      <section className="px-6 lg:px-12 2xl:px-24 bg-[#ffffff] mb-12">
         <h2 className="text-[48px] font-black leading-[100%] mb-[50px]">WE DO THE HEAVY LIFTING</h2>
         <div className="relative flex gap-[30px] flex-col lg:flex-row">
             <div className="relative w-full lg:w-6/12">
@@ -969,7 +989,7 @@ export default function Installation() {
         </div>
       </section>
 
-      <section className="px-6 lg:pt-[30px] lg:px-24 bg-[#ffffff] flex flex-col lg:flex-row mb-12">
+      <section className="px-6 lg:pt-[30px] lg:px-12 2xl:px-24 bg-[#ffffff] flex flex-col lg:flex-row mb-12">
         <div className="flex flex-col w-full lg:w-5/12 lg:mr-[120px] justify-center">
           <h1 className="text-heading text-left uppercase !text-[50px] lg:!text-[48px]">
             Installers

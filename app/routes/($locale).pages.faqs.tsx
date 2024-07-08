@@ -104,23 +104,23 @@ export default function FAQs() {
 
     return (
         <>
-            <section className="faq-page-title px-6 lg:px-24 relative h-[auto] lg:h-[602px] flex pb-[143px] pt-[100px] lg:pt-0">
+            <section className="faq-page-title px-6 lg:px-12 2xl:px-24 relative h-[auto] lg:h-[500px] 2xl:h-[602px] flex pb-[143px] lg:pb-[180px] 2xl:pb-[143px] pt-[100px] lg:pt-0">
                 <div className="mt-auto relative z-10 w-full basis-full">
-                    <p className="text-[#000] font-[700] lg:text-[22px] leading-none">Support & FAQ</p>
+                    <p className="text-[#000] font-[700] lg:text-[20px] 2xl:text-[22px] leading-none">Support & FAQ</p>
                     <div className="flex justify-between flex-wrap lg:flex-nowrap pt-[7px] lg:pt-[14px] flex-col lg:flex-row">
-                        <h1 className="text-[#000] text-[40px] lg:text-[50px] lg:text-[68px] lg:max-w-[780px] font-black leading-[100%] lg:leading-[100%] font-[Montserrat]">FREQUENTLY ASKED QUESTIONS</h1>
+                        <h1 className="text-[#000] text-[40px] 2xl:text-[68px] lg:max-w-[780px] font-black leading-[100%] lg:leading-[100%] font-[Montserrat]">FREQUENTLY ASKED QUESTIONS</h1>
                         <p className="lg:max-w-[606px] text-[#000] text-[16px] lg:text-[22px] leading-[22px] lg:leading-none font-[400] lg:text-right mt-[25px] lg:mt-[0px]">Need some support or have questions about huupe? Here are our most frequently asked questions. </p>
                     </div>
                 </div> 
             </section>
 
-            <section className="px-6 lg:px-24 pt-0 lg:pt-[100px] bg-[#ffffff] relative z-10">
+            <section className="px-6 lg:px-12 2xl:px-24 pt-0 lg:pt-[100px] bg-[#ffffff] relative z-10">
                 <div className="flex flex-wrap">
                     <div className="faq-left w-full lg:w-6/12 basis-full lg:basis-6/12 pr-0">
                         
                         <img src={faqImage} className="rounded-[20px] lg:min-h-[830px] lg:rounded-[10px] block object-cover w-full" />
                     </div>
-                    <div className="faq-right w-full lg:w-6/12 basis-full lg:basis-6/12 pl-0 lg:pl-20 mt-[60px] lg:mt-[0px]">
+                    <div className="faq-right w-full lg:w-6/12 basis-full lg:basis-6/12 pl-0 lg:pl-16 2xl:pl-20 mt-[60px] lg:mt-[0px]">
                         <div className="faq-accordion">
                             {accordionItems.map((accordionItem, index) => (
                             <AccordionItem title={accordionItem.title} content={accordionItem.content} index={index} setIndex={setIndex} activeAccordion={activeAccordion} key={index} />

@@ -60,7 +60,7 @@ export function ProductCard({
   const columnWidth = count && count >= 4 ? '3/12' : '4/12';
 
   return (
-    <div className={`w-full justify-center align-baseline text-center lg:w-${columnWidth} flex flex-col gap-2 bg-[#FBF9F8] rounded-[20px] p-[30px]`}>
+    <div className={`w-full items-center justify-start text-center lg:w-${columnWidth} flex flex-col gap-2 bg-[#FBF9F8] rounded-[20px] p-[30px]`}>
       <Link
         onClick={onClick}
         to={`/products/${product.handle}`}
@@ -117,7 +117,15 @@ export function ProductCard({
       </Link>
       {quickAdd && firstVariant.availableForSale && (
         <div className="text-center">
-          <AddToCartButton
+          <Link
+            onClick={onClick}
+            to={`/products/${product.handle}`}
+            prefetch="intent"
+            className="text-center mt-2 main-button w-[auto] normal-case"
+          >
+            {firstVariant.quantityAvailable && firstVariant.quantityAvailable > 0 ? 'Buy now' : 'Reserve Now' }
+          </Link>
+          {/* <AddToCartButton
             lines={[
               {
                 quantity: 1,
@@ -134,7 +142,7 @@ export function ProductCard({
             <Text as="span" className="flex items-center justify-center gap-2">
             {firstVariant.quantityAvailable && firstVariant.quantityAvailable > 0 ? 'Buy now' : 'Reserve Now' }
             </Text>
-          </AddToCartButton>
+          </AddToCartButton> */}
         </div>
       )}
       {quickAdd && !firstVariant.availableForSale && (

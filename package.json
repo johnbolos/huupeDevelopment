@@ -24,6 +24,8 @@
     "@shopify/cli-hydrogen": "^5.1.1",
     "@shopify/hydrogen": "^2023.7.1",
     "@shopify/remix-oxygen": "^1.1.2",
+    "@types/google-map-react": "^2.1.7",
+    "@uidotdev/usehooks": "^2.2.0",
     "clsx": "^1.2.1",
     "cross-env": "^7.0.3",
     "framer-motion": "^10.15.2",

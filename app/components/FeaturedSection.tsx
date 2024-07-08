@@ -9,11 +9,11 @@ import {ProductSwimlane} from './ProductSwimlane';
 
 export function FeaturedSection() {
   const {load, data} = useFetcher<FeaturedData>();
-  const path = usePrefixPathWithLocale('/featured-products');
+  // const path = usePrefixPathWithLocale('/featured-products');
 
-  useEffect(() => {
-    load(path);
-  }, [load, path]);
+  // useEffect(() => {
+  //   load(path);
+  // }, [load, path]);
 
   if (!data) return null;
 

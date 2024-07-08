@@ -1,9 +1,16 @@
 import {Fragment, useState} from 'react';
 import {Dialog, Transition} from '@headlessui/react';
-
-import {Heading, IconClose} from '~/components';
+import {
+  useIsHomePath,
+} from '~/lib/utils';
+import {Heading, Link,  IconClose} from '~/components';
 
 import logoImage from '../images/logo.webp';
+// import huupeNewLogo from '../images/huupeMiniHeading.webp';
+// import logoImage2 from '../images/huupeNewLogo.webp';
+
+import logoImage2 from '../images/huupeLogoSVG.svg';
+import huupeNewLogo from '../images/huupeLogoSVG.svg';
 
 /**
  * Drawer component that opens on user click.
@@ -31,6 +38,28 @@ export function Drawer({
     right: 'translate-x-full',
     left: '-translate-x-full',
   };
+
+  const currentURL = useIsHomePath(true);
+  const headerMenuItems = [
+    {
+      name: 'mini',
+      url: '/pages/huupe-mini',
+      target: '_self',
+      title: 'huupe mini',
+    },
+    {
+      name: 'PRO',
+      url: '/pages/huupe-pro',
+      target: '_self',
+      title: 'huupe PRO',
+    },
+    {
+      name: 'Buy',
+      url: '/pages/buy',
+      target: '_self',
+      title: 'Buy',
+    },
+  ];
 
   return (
     <Transition appear show={open} as={Fragment}>
@@ -65,7 +94,7 @@ export function Drawer({
               >
                 <Dialog.Panel className="w-screen text-left align-middle transition-all transform shadow-xl h-auto bg-[#ffffff]">
                   <header
-                    className={`px-6 lg:px-24 pt-7 lg:pt-12 sticky top-0 flex items-center ${
+                    className={`px-6 lg:px-12 2xl:px-24 pt-7 lg:pt-12 sticky top-0 flex items-center ${
                       heading ? 'justify-between' : 'justify-end'
                     }`}
                   >
@@ -87,6 +116,30 @@ export function Drawer({
                         <path d="M12.1 37.3L10 35.2L21.55 23.65L10 12.1L12.1 10L23.65 21.55L35.2 10L37.3 12.1L25.75 23.65L37.3 35.2L35.2 37.3L23.65 25.75L12.1 37.3Z" fill="black"/>
                       </svg>
                     </button>
+                    <nav className={`header-nav-items hidden lg:flex`} >
+                      <Link to="/" prefetch="intent">
+                        <img
+                          src={logoImage2}
+                          height="1008px"
+                          width="3334px"
+                          className="w-full max-w-[124px]"
+                          alt="huupe logo"
+                        />
+                      </Link>
+                      {/* Top level menu items */}
+                      {(headerMenuItems || []).map((item, index) => (
+                        <Link
+                          key={item.url}
+                          to={item.url}
+                          target={item.target}
+                          prefetch="intent"
+                          className={`pb-1 ${currentURL.indexOf('/products/') >= 0 ? 'hidden' : ''}`}
+                        >
+                          {index == 0 || index == 1 ? <img className="h-[26px] inline-block" src={huupeNewLogo} /> : null}
+                          {index == 1 ? <span className="font-bold font-[League Spartan]">{item.name}</span> : item.name}
+                        </Link>
+                      ))}
+                    </nav>
                   </header>
                   {children}
                 </Dialog.Panel>

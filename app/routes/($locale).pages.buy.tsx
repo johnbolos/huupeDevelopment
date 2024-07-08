@@ -123,7 +123,7 @@ export default function BuyPage() {
     return (
         <>
             <section className="px-6 lg:px-24 pt-[100px] lg:pt-[146px]">
-                <h1 className="text-center font-[Montserrat] text-[28px] lg:text-[48px] leading-[100%] text-[#000] font-[400]">Compare huupe models</h1>
+                <h1 className="text-center font-[Montserrat] text-[28px] lg:text-[40px] 2xl:text-[48px] leading-[100%] text-[#000] font-[400]">Compare huupe models</h1>
 
                 <div className="flex flex-wrap justify-center gap-[20px] my-[20px] lg:my-[50px]">
                     <Suspense>
@@ -144,8 +144,8 @@ export default function BuyPage() {
             </section>
 
 
-            <section className="px-6 lg:px-24 mb-12 lg:mb-24">
-                <h2 className="text-center font-[Montserrat] text-[28px] lg:text-[48px] leading-[100%] text-[#000] font-[400]">Shop accessories</h2>
+            <section className="px-6 lg:px-12 2xl:px-24 mb-12 lg:mb-24">
+                <h2 className="text-center font-[Montserrat] text-[28px] lg:text-[40px] 2xl:text-[48px] leading-[100%] text-[#000] font-[400]">Shop accessories</h2>
 
                 <div className="flex flex-wrap mt-[20px] lg:mt-[40px] -mx-[10px]">
                     {productAccessories?.map((accessory, index) => (
@@ -155,8 +155,8 @@ export default function BuyPage() {
                                     <img src={accessory.image} alt={accessory.title} className={`w-auto ${index >= 4 ? 'h-full object-bottom' : 'h-auto object-center'} object-contain  block mx-auto`} width="300" height="300"/>
                                 </div>
                                 <div className="flex justify-between mt-[15px] lg:mb-[60px]">
-                                    <p className="text-[#000] font-bold text-[14px] lg:text-[24px] leading-[100%]">{accessory.title}{accessory.description != '' && <span className="font-normal block">({accessory.description})</span>}</p>
-                                    <p className="text-[#000] text-[14px] lg:text-[24px] leading-[100%]">{accessory.price ? '$' + accessory.price : '$TBD' }</p>
+                                    <p className="text-[#000] font-bold text-[14px] lg:text-[18px] 2xl:text-[24px] leading-[100%]">{accessory.title}{accessory.description != '' && <span className="font-normal block">({accessory.description})</span>}</p>
+                                    <p className="text-[#000] text-[14px] lg:text-[18px] 2xl:text-[24px] leading-[100%]">{accessory.price ? '$' + accessory.price : '$TBD' }</p>
                                 </div>
                             </div>
                         </div>

@@ -17,7 +17,7 @@ export function NotFound({type = 'page'}: {type?: string}) {
         </Button>
       </PageHeader>
       <div className="lg:px-16 bg-[#ffffff]">
-        <FeaturedSection />
+        {/* <FeaturedSection /> */}
       </div>
     </>
   );

@@ -1,4 +1,4 @@
-import React, {useRef, Suspense, useState, useEffect} from 'react';
+import {useRef, Suspense, useState, useEffect} from 'react';
 import {Disclosure, Listbox} from '@headlessui/react';
 import {defer, redirect, type LoaderArgs} from '@shopify/remix-oxygen';
 import {useLoaderData, Await, Form} from '@remix-run/react';
@@ -21,27 +21,20 @@ import {
   IconCaret,
   IconCheck,
   IconClose,
-  ProductGallery,
-  ProductSwimlane,
-  Section,
-  Skeleton,
   Text,
   Link,
   AddToCartButton,
   Button,
 } from '~/components';
-import {getExcerpt} from '~/lib/utils';
 import {seoPayload} from '~/lib/seo.server';
 import type {Storefront} from '~/lib/type';
 import {routeHeaders} from '~/data/cache';
 import {MEDIA_FRAGMENT, PRODUCT_CARD_FRAGMENT} from '~/data/fragments';
-// import KlaviyoPublishProductView from '~/components/klaviyo/KlaviyoPublishProductView.client';
+import {huupes} from '~/data/huupes';
 
-import productImage from '../images/products/productImage.webp';
 import subscription from '../images/products/subscription.webp';
 import thumbsUp from '../images/products/thumbsUp.webp';
 import premium from '../images/products/premium.webp';
-import comingSoon from '../images/comingSoon.webp';
 
 export const headers = routeHeaders;
 
@@ -141,17 +134,21 @@ export default function Product() {
   const {media, title, vendor, descriptionHtml} = product;
   const {shippingPolicy, refundPolicy} = shop;
   const [quantity, setQuantity] = useState(1);
+  const [huupeVariants, setHuupeVariants] = useState();
+  const productSpecs = huupes.find((huupe) => huupe.product === product.handle);
 
   const selectedVariant = product.selectedVariant!;
   // const isOutOfStock = !selectedVariant?.availableForSale;
   const isOutOfStock = true;
+  // const huupeImages = media.nodes.splice(2, media.nodes.length);
 
   const isOnSale =
     selectedVariant?.price?.amount &&
     selectedVariant?.compareAtPrice?.amount &&
     selectedVariant?.price?.amount < selectedVariant?.compareAtPrice?.amount;
 
-  const [firstImage, setFirstImage] = useState(null);
+  const [displayImage, setDisplayImage] = useState(null);
+  const [huupeImages, setHuupeImages] = useState();
 
   const [variantData, setVariantData] = useState(selectedVariant?.price!);
   const [monthlyData, setMonthlyData] = useState({
@@ -163,35 +160,54 @@ export default function Product() {
       : 'USD',
   });
 
+  const isPoleMounted = product.selectedVariant?.title
+    .toLowerCase()
+    .includes('pole');
+
   const iconBadges = [
     {
       title: 'Money Back Guarantee',
       icon: premium,
+      iconHeight: '48',
+      iconWidth: '48',
       altText: 'a screen with a play arrow icon',
     },
     {
       title: 'Satisfaction Guaranteed',
       icon: thumbsUp,
+      iconHeight: '48',
+      iconWidth: '48',
       altText: 'thumbs up icon',
     },
     {
       title: 'Free Video Training Updates',
       icon: subscription,
+      iconHeight: '48',
+      iconWidth: '48',
       altText: 'ribbon with a dark star in the center icon',
     },
   ];
 
   useEffect(() => {
     media.nodes.map((mediaImage, index) => {
-      if (index === 0 && mediaImage.__typename === 'MediaImage') {
+      if (
+        index === (isPoleMounted ? 0 : 3) &&
+        mediaImage.__typename === 'MediaImage'
+      ) {
         const image =
           mediaImage.__typename === 'MediaImage'
             ? {...mediaImage.image, altText: mediaImage.alt || 'Product image'}
             : null;
-        setFirstImage(image);
+        setDisplayImage(image);
       }
     });
   }, [media]);
+
+  useEffect(() => {
+    if (media.nodes.length > 0) {
+      setHuupeImages(media.nodes);
+    }
+  }, [media.nodes, media.nodes.length]);
 
   const adjustQuantityPrice = (qty) => {
     setQuantity(qty);
@@ -212,6 +228,22 @@ export default function Product() {
     });
   };
 
+  const handleIconClick = (selectedImage) => {
+    const image = {
+      ...selectedImage.image,
+      altText: selectedImage.alt || 'Product image',
+    };
+    setDisplayImage(image);
+  };
+
+  useEffect(() => {
+    const getVariants = async () => {
+      const myVariants = await variants;
+      setHuupeVariants(myVariants.product?.variants);
+    };
+    getVariants();
+  }, [variants]);
+
   const form = useRef();
 
   useEffect(() => {
@@ -222,67 +254,124 @@ export default function Product() {
 
   return (
     <>
-      <section className="flex flex-wrap bg-gradient-to-b lg:bg-gradient-to-r from-[#f7ece4] to-[#ececec] lg:h-[100vh]">
-        <div className="w-full lg:w-7/12 basis-full lg:basis-7/12 relative lg:flex lg:flex-col">
-          {firstImage && (
-            <img
-              src={firstImage?.url}
-              alt={
-                firstImage?.altText ||
-                'huupe backboard facing frontwards with the screen turned on with a mixture of bright color'
-              }
-              loading="lazy"
-              className="w-full my-[100px] lg:my-[auto] h-auto lg:max-w-[700px] 2xl:max-w-[700px] object-cover m-auto"
-            />
-          )}
+      <section className="flex flex-col lg:flex-row bg-gradient-to-b lg:bg-gradient-to-r bg-white lg:h-screen">
+        <div className="w-full lg:w-7/12 basis-full lg:basis-7/12 relative flex flex-col justify-between h-screen">
+          <div className="!mt-[100px] h-[calc(100vh-316px)] flex">
+            {displayImage && (
+              <img
+                src={displayImage?.url}
+                alt={
+                  displayImage?.altText ||
+                  'huupe backboard facing frontwards with the screen turned on with a mixture of bright color'
+                }
+                height={displayImage?.height}
+                width={displayImage?.width}
+                className={`w-full h-[calc(100vh-338px)] md:h-auto max-h-[calc(100vh-316px)] object-contain lg:max-w-[700px] 2xl:max-w-[700px] mx-auto`}
+              />
+            )}
+          </div>
 
-          <div className="absolute left-0 bottom-0 flex w-full px-6 lg:pl-24 lg:pr-[50px] py-[30px] lg:py-[40px] bg-[#F1ECE8] overflow-x-auto">
-            {iconBadges.map((badge, index) => (
-              <div
-                key={index}
-                className={`${
-                  iconBadges.length - 1 === index
-                    ? ''
-                    : 'pr-[22px] lg:pr-[60px] '
-                }flex items-center`}
-              >
-                <img
-                  src={badge.icon}
-                  alt={badge.title}
-                  loading="lazy"
-                  className="max-w-[30px] lg:max-w-none object-contain"
-                />
-                <p className="ml-[4px] text-[#1a1a1a] whitespace-nowrap">
-                  {badge.title}
-                </p>
+          <div className="relative flex flex-col w-full px-6 lg:pl-24 lg:pr-[50px] py-6 bg-white justify-between">
+            <div className="w-full overflow-scroll">
+              <div className="flex flex-row w-fit overflow-scroll mb-6">
+                {huupeImages
+                  ? huupeImages?.map((huupe) => (
+                      <div
+                        key={huupe.image.url}
+                        onClick={() => handleIconClick(huupe)}
+                        className={`h-24 w-24 ${
+                          displayImage.url === huupe.image.url
+                            ? ' border-[#0071E3] border-4 p-0 '
+                            : ' border-black border-[1px] p-[3px] '
+                        } ${
+                          displayImage.url !== huupe.image.url &&
+                          'hover:border-[#71b6fa] focus:border-[#71b6fa] hover:border-4 focus:border-4 focus:p-0 hover:p-0 '
+                        } object-contain mr-4 bg-white rounded-[10px] flex justify-center items-center`}
+                      >
+                        <img
+                          src={huupe.image.url}
+                          alt={huupe.alt}
+                          height={huupe.image.height}
+                          width={huupe.image.width}
+                          className=""
+                        />
+                      </div>
+                    ))
+                  : null}
               </div>
-            ))}
+            </div>
+            <div className="flex flex-row justify-between">
+              {iconBadges.map((badge, index) => (
+                <div
+                  key={index}
+                  className={`${
+                    iconBadges.length - 1 === index ? '' : 'pr-[22px] '
+                  }flex flex-col md:flex-row items-center`}
+                >
+                  <img
+                    src={badge.icon}
+                    alt={badge.title}
+                    height={badge.iconHeight}
+                    width={badge.iconWidth}
+                    loading="lazy"
+                    className="max-w-[30px] lg:max-w-[36px] xl:max-w-none object-contain"
+                  />
+                  <p className="ml-[4px] text-[#1a1a1a] text-center md:text-left">
+                    {badge.title}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-        <div className="w-full lg:w-5/12 basis-full lg:basis-5/12 flex flex-col bg-[#ffffff]">
-          <div className="pr-6 2xl:pr-24 pt-[40px] pb-[50px] lg:pt-[107px] pl-6 2xl:pl-[112px] singleProductDetails">
-            <p className="text-[#1a1a1a] font-[14px] mb-[30px] leading-[22px]">
+        <div className="w-full lg:w-5/12 basis-full lg:basis-5/12 flex flex-col bg-white lg:h-screen">
+          <div className="pr-6 2xl:pr-24 pt-[30px] pb-[24px] pl-6 2xl:pl-[112px]">
+            <p className="text-[#1a1a1a] text-[14px] mb-[30px] leading-[22px]">
               Pick your huupe.
             </p>
-            <div className="flex rounded-[10px] border-[1px] border-[#000000] bg-[#fff5ee] py-[14px] px-[19px] lg:p-[25px] cursor-pointer">
-              {firstImage && (
+            <div className="flex rounded-[10px] border-[1px] border-[#000000] bg-white py-[14px] px-[19px] lg:p-[25px]">
+              {huupeImages && (
                 <img
-                  src={firstImage.url}
-                  alt={firstImage.altText}
+                  src={huupeImages[4].image.url}
+                  alt={huupeImages[4].altText}
+                  height={huupeImages[4].image.height}
+                  width={huupeImages[4].image.width}
                   loading="lazy"
                   className="hidden md:block max-w-[79px] lg:max-w-[107px] max-h-[79px] lg:max-h-[107px] object-cover"
                 />
               )}
               <div className="pl-0 md:pl-[15px] lg:pl-[30px]">
-                <h1 className="font-[Radikal] text-[24px] lg:text-[34px] font-[900] leading-[34px] text-[#000000] mb-[7px] lg:mb-[12px]">
+                <h1 className="font-[Radikal] text-[24px] xl:text-[34px] font-[900] leading-[34px] text-[#000000] mb-[7px] lg:mb-[12px]">
                   {title}
                 </h1>
-                <Link
-                  to="/pages/how-it-works"
-                  className="underline text-[#8E8E8E] font-[14px] font-[General Sans] leading-[22px]"
-                >
-                  View Huupe Specs
-                </Link>
+                <div className="group">
+                  <p className="underline text-[#8E8E8E] font-[14px] font-[General Sans] leading-[22px] cursor-pointer">
+                    View huupe Specs
+                  </p>
+                  <div className="absolute hidden group-hover:flex flex-col left-0 mx-6 w-[calc(100vw-48px)] lg:w-[calc(41.6667%-48px)] 2xl:w-[calc(41.6667%-208px)] lg:left-auto lg:right-0 lg:mr-6 2xl:mr-[96px] rounded-[10px] border-[1px] border-[#000000] bg-white p-4 cursor-default z-50">
+                    {productSpecs?.data.map((spec, index) => (
+                      <div key={spec.name}>
+                        <h3
+                          className={`${
+                            index !== 0 ? 'mt-4 ' : ''
+                          } font-black text-[12px] leading-[120%]`}
+                        >
+                          {spec.name}
+                        </h3>
+                        <table className="table text-[12px] leading-[120%]">
+                          <tbody>
+                            {spec.details.map((item, i) => (
+                              <tr className="pb-2" key={item.title}>
+                                <td className="w-[60px] pr-6">{item.title}</td>
+                                <td>{item.content}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    ))}
+                  </div>
+                </div>
                 <div className="md:hidden">
                   <div className="flex quantitySelector items-center mt-[12px]">
                     <p className="text-[#000000] !mb-[0px] mr-[10px]">
@@ -314,8 +403,11 @@ export default function Product() {
                   withoutTrailingZeros
                   data={variantData}
                   as="h2"
-                  className="font-[Radikal] text-[24px] lg:text-[34px] font-[900] leading-[34px] text-[#000000] text-right"
+                  className="font-[Radikal] text-[24px] xl:text-[34px] font-[900] leading-[34px] text-[#000000] text-right"
                 />
+                <p className="text-[#1a1a1a] text-[14px] mb-[30px] leading-[22px] text-right">
+                  Down Payment
+                </p>
 
                 <div className="hidden md:flex quantitySelector  items-center mt-auto">
                   <p className="text-[#000000] !mb-[0px] mr-[10px]">
@@ -341,49 +433,114 @@ export default function Product() {
                 </div>
               </div>
             </div>
-
-            <div
-              className={`flex rounded-[10px] border-[1px] border-[#D9D9D9] bg-[url('../images/comingSoon.webp')] bg-cover bg-scroll bg-center bg-no-repeat py-[14px] px-[19px] lg:p-[25px] cursor-pointer mt-[30px]`}
-            >
-              <div className="relative w-full h-full text-center">
-                <p className="!mb-0 text-[14px] text-[#ffffff] font-[700] leading-[22px]">
-                  NEW huupe Coming Soon!
-                </p>
-                <p className="text-[#ffffff]">
-                  Notify me when this product is in stock
-                </p>
-
-                <div className="flex gap-x-[10px] justify-center">
-                  <div className="klaviyo-form-VjN4UC"></div>
-                </div>
-              </div>
-            </div>
           </div>
 
-          <div className="mt-auto bg-[#F1ECE8]">
-            <div className="flex justify-between pr-6 2xl:pr-24 pl-6 2xl:pl-[112px] pt-[21px] pb-[21px] border-b-[1px] border-[#d0d0d0]">
+          <div className="pr-6 2xl:pr-24 pl-6 2xl:pl-[112px] lg:overflow-y-auto">
+            {huupeVariants && (
+              <VariantSelector
+                handle={product.handle}
+                options={product.options}
+                variants={huupeVariants}
+              >
+                {({option}) => {
+                  return (
+                    <div
+                      key={option.name}
+                      className="flex flex-col flex-wrap mb-4"
+                    >
+                      <p className="min-w-[4rem]">{option.name}</p>
+                      <div className="flex flex-wrap flex-col items-baseline gap-4">
+                        {option.values.map(
+                          ({value, isAvailable, isActive, to}) => {
+                            const huupeInfo = huupeVariants?.nodes.find(
+                              (node) => node.title === value,
+                            );
+                            return (
+                              <Link
+                                key={option.name + value}
+                                to={to}
+                                preventScrollReset
+                                prefetch="intent"
+                                replace
+                                className={
+                                  'leading-none py-1 cursor-pointer transition-all duration-200 w-full'
+                                }
+                              >
+                                <div
+                                  className={`flex rounded-[10px] bg-white ${
+                                    isActive
+                                      ? 'border-4 border-[#0071E3] py-[11px] px-[16px]'
+                                      : 'border-[1px] border-[#000000] py-[14px] px-[19px] '
+                                  }
+                                  ${
+                                    !isActive &&
+                                    ' focus:border-4 focus:border-[#71b6fa] focus:py-[11px] focus:px-[16px] hover:border-4 hover:border-[#71b6fa] hover:py-[11px] hover:px-[16px] '
+                                  }
+                                  `}
+                                >
+                                  <img
+                                    src={huupeInfo.image.url}
+                                    alt={
+                                      huupeInfo.image.altText ?? 'product image'
+                                    }
+                                    height={huupeInfo.image.height}
+                                    width={huupeInfo.image.width}
+                                    loading="lazy"
+                                    className="max-w-[60px] max-h-[60px] object-cover"
+                                  />
+                                  <div className="pl-0 md:pl-[15px] lg:pl-[30px] flex items-center">
+                                    <h2 className="font-[Radikal] !text-[16px] sm:!text-[20px] !font-[400] leading-[20px] text-[#000000]">
+                                      {value}
+                                    </h2>
+                                  </div>
+                                </div>
+                              </Link>
+                            );
+                          },
+                        )}
+                      </div>
+                    </div>
+                  );
+                }}
+              </VariantSelector>
+            )}
+            <p className="text-[#1a1a1a] text-center text-[11px] mb-4 leading-[120%]">
+              For all inquiries, please reach out to media@huupe.com
+            </p>
+          </div>
+
+          <div className="lg:mt-auto bg-white sticky bottom-0 right-0">
+            <div className="flex justify-between pr-6 2xl:pr-24 pl-6 2xl:pl-[112px] pt-[21px]">
               <p className="font-[400] text-[19px] lg:text-[24px] leading-[34px] text-[#000000] !mb-0">
                 <span className="lg:hidden">Sub-</span>Total
               </p>
-              <p className="font-[400] text-[19px] lg:text-[24px] leading-[34px] text-[#000000] !mb-0">
-                <Money
-                  withoutTrailingZeros
-                  data={variantData}
-                  as="span"
-                  className="font-[700]"
-                />
-              </p>
+              <div className="flex flex-col">
+                <p className="font-[400] text-[19px] lg:text-[24px] leading-[34px] text-[#000000] !mb-0 text-right">
+                  <Money
+                    withoutTrailingZeros
+                    data={variantData}
+                    as="span"
+                    className="font-[700]"
+                  />
+                </p>
+                <p className="text-[#1a1a1a] font-[14px] mb-[30px] leading-[22px] text-right">
+                  Down Payment
+                </p>
+              </div>
             </div>
-            <div className="pt-[37px] pb-[29px] flex justify-end items-center pr-6 2xl:pr-24 pl-6 2xl:pl-[112px]">
+            <div className="pb-[29px] flex justify-end items-center pr-6 2xl:pr-24 pl-6 2xl:pl-[112px]">
               <Suspense fallback={<ProductForm variants={[]} />}>
                 <Await
                   errorElement="There was a problem loading related products"
                   resolve={variants}
                 >
                   {(resp) => (
-                    <ProductForm
-                      variants={resp.product?.variants.nodes || []}
-                    />
+                    <>
+                      <ProductForm
+                        variants={resp.product?.variants.nodes || []}
+                        quantity={quantity}
+                      />
+                    </>
                   )}
                 </Await>
               </Suspense>
@@ -400,7 +557,7 @@ export function ProductForm({
   quantity,
 }: {
   variants: ProductVariantFragmentFragment[];
-  quantity: 1;
+  quantity: number;
 }) {
   const {product, analytics, storeDomain} = useLoaderData<typeof loader>();
 
@@ -421,107 +578,12 @@ export function ProductForm({
 
   const productAnalytics: ShopifyAnalyticsProduct = {
     ...analytics.products[0],
-    quantity: quantity,
+    quantity,
   };
 
   return (
     <div className="grid gap-10">
       <div className="grid gap-4">
-        <VariantSelector
-          handle={product.handle}
-          options={product.options}
-          variants={variants}
-        >
-          {({option}) => {
-            return (
-              <div
-                key={option.name}
-                className="flex flex-col flex-wrap mb-4 gap-y-2 last:mb-0"
-              >
-                <Heading as="legend" size="lead" className="min-w-[4rem]">
-                  {option.name}
-                </Heading>
-                <div className="flex flex-wrap items-baseline gap-4">
-                  {option.values.length > 7 ? (
-                    <div className="relative w-full">
-                      <Listbox>
-                        {({open}) => (
-                          <>
-                            <Listbox.Button
-                              ref={closeRef}
-                              className={clsx(
-                                'flex items-center justify-between w-full py-3 px-4 border border-primary',
-                                open
-                                  ? 'rounded-b md:rounded-t md:rounded-b-none'
-                                  : 'rounded',
-                              )}
-                            >
-                              <span>{option.value}</span>
-                              <IconCaret direction={open ? 'up' : 'down'} />
-                            </Listbox.Button>
-                            <Listbox.Options
-                              className={clsx(
-                                'border-primary bg-contrast absolute bottom-12 z-30 grid h-48 w-full overflow-y-scroll rounded-t border px-2 py-2 transition-[max-height] duration-150 sm:bottom-auto md:rounded-b md:rounded-t-none md:border-t-0 md:border-b',
-                                open ? 'max-h-48' : 'max-h-0',
-                              )}
-                            >
-                              {option.values
-                                .filter((value) => value.isAvailable)
-                                .map(({value, to, isActive}) => (
-                                  <Listbox.Option
-                                    key={`option-${option.name}-${value}`}
-                                    value={value}
-                                  >
-                                    {({active}) => (
-                                      <Link
-                                        to={to}
-                                        className={clsx(
-                                          'text-primary w-full p-2 transition rounded flex justify-start items-center text-left cursor-pointer',
-                                          active && 'bg-primary/10',
-                                        )}
-                                        onClick={() => {
-                                          if (!closeRef?.current) return;
-                                          closeRef.current.click();
-                                        }}
-                                      >
-                                        {value}
-                                        {isActive && (
-                                          <span className="ml-2">
-                                            <IconCheck />
-                                          </span>
-                                        )}
-                                      </Link>
-                                    )}
-                                  </Listbox.Option>
-                                ))}
-                            </Listbox.Options>
-                          </>
-                        )}
-                      </Listbox>
-                    </div>
-                  ) : (
-                    option.values.map(({value, isAvailable, isActive, to}) => (
-                      <Link
-                        key={option.name + value}
-                        to={to}
-                        preventScrollReset
-                        prefetch="intent"
-                        replace
-                        className={clsx(
-                          'leading-none py-1 border-b-[1.5px] cursor-pointer transition-all duration-200',
-                          isActive ? 'border-primary/50' : 'border-primary/0',
-                          isAvailable ? 'opacity-100' : 'opacity-50',
-                        )}
-                      >
-                        {value}
-                      </Link>
-                    ))
-                  )}
-                </div>
-              </div>
-            );
-          }}
-        </VariantSelector>
         {selectedVariant && (
           <div className="grid items-stretch gap-4">
             {isOutOfStock ? (
@@ -533,7 +595,7 @@ export function ProductForm({
                 lines={[
                   {
                     merchandiseId: selectedVariant.id!,
-                    quantity: quantity,
+                    quantity,
                   },
                 ]}
                 variant="primary"
@@ -547,13 +609,6 @@ export function ProductForm({
                 Next
               </AddToCartButton>
             )}
-            {/* {!isOutOfStock && (
-              <ShopPayButton
-                width="100%"
-                variantIds={[selectedVariant?.id!]}
-                storeDomain={storeDomain}
-              />
-            )} */}
           </div>
         )}
       </div>
@@ -667,7 +722,7 @@ const PRODUCT_QUERY = `#graphql
       selectedVariant: variantBySelectedOptions(selectedOptions: $selectedOptions) {
         ...ProductVariantFragment
       }
-      media(first: 7) {
+      media(first: 9) {
         nodes {
           ...Media
         }
