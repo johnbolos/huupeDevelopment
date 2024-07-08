@@ -70,6 +70,9 @@ import appletvIcon from '../images/appletv.webp';
 import paramountIcon from '../images/paramount.webp';
 
 
+import worldFirstSmart from '../images/worldFirstSmart.webp';
+
+
 
 export const headers = routeHeaders;
 
@@ -555,13 +558,16 @@ export default function Homepage() {
                 <div className="w-full lg:w-6/12 p-6 lg:p-0 lg:pr-4">
                   <h2 className="hidden lg:block text-[#000] text-[24px] lg:text-[40px] 2xl:text-[55px] font-black leading-[24px] lg:leading-[50px] 2xl:leading-[66px] normal-case lg:uppercase">The world's first smart mini hoop game console</h2>
                   <p className="block lg:hidden text-[#000] text-[24px] lg:text-[40px] 2xl:text-[55px] font-black leading-[24px] lg:leading-[50px] 2xl:leading-[66px] normal-case lg:uppercase">The world's first smart mini hoop game console</p>
-                  <div className="slider-dots flex flex-col relative pl-[20px] mt-[20px]">
-                    <span className="slider-dots-fade-top absolute w-full top-0 left-[15px] pointer-events-none z-20" style={{height: (progressingSlide <= 8 ? 0 : progressingSlide) + '%'}}></span>
+                  <div className="slider-dots flex flex-col relative pl-0 mt-[20px]">
+                    {/* <span className="slider-dots-fade-top absolute w-full top-0 left-[15px] pointer-events-none z-20" style={{height: (progressingSlide <= 8 ? 0 : progressingSlide) + '%'}}></span> */}
                     {slideWithText.map((sliderDot, index2) => (
+                      // className={`${
+                      //   slideActive == index2 ? 'active z-40 text-[#0071E3] text-[20px] lg:text-[28px] 2xl:text-[34px] font-bold' : 'z-10 text-[16px] lg:text-[20px] 2xl:text-[24px] font-normal text-[#000] opacity-40'
+                      // } leading-[110%] cursor-pointer transition-all relative`}
                       <div
                         className={`${
-                          slideActive == index2 ? 'active z-40 text-[#0071E3] text-[20px] lg:text-[28px] 2xl:text-[34px] font-bold' : 'z-10 text-[16px] lg:text-[20px] 2xl:text-[24px] font-normal text-[#000] opacity-40'
-                        } leading-[110%] cursor-pointer transition-all relative`}
+                          slideActive == index2 ? 'active z-40 text-[#0071E3] text-[20px] lg:text-[28px] 2xl:text-[34px] font-bold' : 'active z-40 text-[#0071E3] text-[20px] lg:text-[28px] 2xl:text-[34px] font-bold'
+                        } leading-[110%] transition-all relative`}
                         key={index2}
                         onClick={() => {
                           setslideActive(index2);
@@ -582,34 +588,15 @@ export default function Homepage() {
                       >{sliderDot.heading}</div>
                     ))}
 
-                    <span className="absolute h-full top-0 left-0 bg-[#D9D9D9] w-[6px] rounded-[120px]">
+                    {/* <span className="absolute h-full top-0 left-0 bg-[#D9D9D9] w-[6px] rounded-[120px]">
                       <span className="absolute top-0 left-0 w-full bg-[#0071E3] transition-all rounded-[120px]" style={{height: progressingSlide + '%'}}></span>
                     </span>
-                    <span className="slider-dots-fade-bottom absolute w-full bottom-0 left-[15px] pointer-events-none z-20" style={{height: (100 - progressingSlide) + '%'}}></span>
+                    <span className="slider-dots-fade-bottom absolute w-full bottom-0 left-[15px] pointer-events-none z-20" style={{height: (100 - progressingSlide) + '%'}}></span> */}
                   </div>
                   
                 </div>
                 <div className="w-full lg:w-6/12 mt-[20px] lg:mt-0 slideMedia pl-0 lg:pl-4">
-                  {slideActiveVideo !== '' ? (
-                    <LazyLoad className="h-full">
-                      <video
-                        key={slideActiveVideo}
-                        height="100%"
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        poster={slideActiveImage}
-                        className="h-full object-cover lg:rounded-[20px]"
-                      >
-                        <source src={slideActiveVideo} type="video/mp4" />
-                        <source src={slideActiveVideo} type="video/webm" />
-                        Your browser does not support the video tag.
-                      </video>
-                    </LazyLoad>
-                  ) : (
-                    <img src={slideActiveImage} className="h-full object-cover lg:rounded-[20px]" />
-                  )}
+                  <img src={worldFirstSmart} className="h-full object-cover lg:rounded-[20px]" />
                 </div>
               </div>
             </div>
