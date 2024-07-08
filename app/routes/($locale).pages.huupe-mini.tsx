@@ -78,7 +78,7 @@ import step3 from '../images/huupeMini/step3.webp';
 import step4 from '../images/huupeMini/step4.webp';
 
 
-import someSVG from '../images/cSVG.svg';
+import someSVG from '../images/cSVG.svg'; 
 
 import worldFirstSmart from '../images/worldFirstSmart.webp';
 
